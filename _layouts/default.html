@@ -2,12 +2,18 @@
 <link rel="stylesheet" href="../assets/css/devicon.min.css">
 <html lang="en">
   {% include head.html %}
-  <body>
-      {% include header.html %}
-      <section id="about">
+<body>
+    {% include header.html %}
+
+    <div class="hero-image">
+        <img src="{{ '/assets/logo.jpg' | relative_url }}"
+             alt="Dr. Golberg">
+    </div>
+
+    <section id="about">
         {% include about.html %}
-      </section>
-        {{ content }}
-      {% include footer.html %}
-  </body>
+    </section>
+    {{ content }}
+    {% include footer.html %}
+</body>
 </html>

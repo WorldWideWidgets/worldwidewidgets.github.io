@@ -1,7 +1,11 @@
 {
   "ExpandedNodes": [
-    ""
+    "",
+    "\\.github",
+    "\\assets",
+    "\\_includes",
+    "\\_layouts"
   ],
-  "SelectedNode": "\\README.md",
+  "SelectedNode": "\\_includes\\head.html",
   "PreviewInSolutionExplorer": false
 }
