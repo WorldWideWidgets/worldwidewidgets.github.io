@@ -1,0 +1,40 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <link rel="icon" type="image/x-icon" href="/favicon.ico">
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;700&family=Roboto+Mono&display=swap" rel="stylesheet">
+
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>AI Assistant - Crypto-Dev</title>
+    <!-- Import your shared styles -->
+    <link rel="stylesheet" href="style.css">
+    <title>Wallet Clustering - Crypto-Dev</title>
+    <link rel="stylesheet" href="style.css">
+</head>
+<body>
+    <div id="footer-site"></div>
+    <div class="container">
+        <nav><a href="index.html">← Back to Home</a></nav>
+        <h2>Wallet Clustering Algorithm</h2>
+        <p>Sample Python logic for identifying related entity addresses via common-input heuristics.</p>
+        
+        <pre><code>
+def cluster_wallets(transactions):
+    """
+    Heuristic: If multiple addresses are used as inputs 
+    in a single transaction, they likely belong to the same entity.
+    """
+    clusters = {}
+    for tx in transactions:
+        inputs = tx['vin']
+        # Grouping logic would go here
+    return clusters
+        </code></pre>
+    </div>
+<div id="footer-site"></div>
+</body>
+</html>
+

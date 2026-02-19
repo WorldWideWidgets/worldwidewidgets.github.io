@@ -1,0 +1,325 @@
+:root {
+    --bg: #ffffff;
+    --text: #000000;
+    --border: #e5e7eb;
+    --hover-bg: #f9fafb;
+    --accent: #000000;
+}
+
+body {
+    font-family: 'Inter', sans-serif;
+    background-color: var(--bg);
+    color: var(--text);
+    margin: 0;
+    padding: 20px; /* Reduced for mobile, increased in media query */
+    line-height: 1.5;
+}
+
+.container { max-width: 700px; margin: 0 auto; }
+
+.logo { 
+    font-weight: 700; 
+    font-size: 1.5rem; 
+    text-transform: uppercase; 
+    letter-spacing: 2px; 
+    margin-bottom: 2rem; 
+}
+
+/* CARDS: Default to stacking (Mobile) */
+/* Update the Card Container to handle the Grid */
+.card-container {
+    display: grid;
+    grid-template-columns: 1fr 1fr; /* Side-by-side on desktop */
+    gap: 24px;
+    margin-top: 40px;
+}
+
+.card {
+    display: flex;
+    flex-direction: column;
+    height: 450px; /* Fixed total height */
+    border: 1px solid var(--border);
+    border-radius: 16px;
+    overflow: hidden;
+    text-decoration: none;
+    color: inherit;
+    transition: transform 0.3s ease, box-shadow 0.3s ease;
+    background: #fff;
+}
+
+.card:hover {
+    transform: translateY(-8px);
+    box-shadow: 0 12px 24px rgba(0,0,0,0.1);
+    border-color: var(--accent);
+}
+
+/* Image takes up 70% of the card height */
+.card-image-wrapper {
+    height: 70%;
+    width: 100%;
+    overflow: hidden;
+}
+
+.card-image {
+    width: 100%;
+    height: 100%;
+    object-fit: cover; /* This is the "modern" secret for perfect scaling */
+    display: block;
+}
+
+/* Text Content takes up the remaining 30% */
+.card-content {
+    height: 30%;
+    padding: 20px;
+    display: flex;
+    flex-direction: column;
+    justify-content: center; /* Vertically centers the text in the 30% area */
+    background: #fff;
+}
+
+.card-content h3 {
+    margin: 0 0 8px 0;
+    font-size: 1.25rem;
+    font-weight: 700;
+}
+
+.card-content p {
+    margin: 0;
+    font-size: 0.95rem;
+    color: #555;
+    line-height: 1.4;
+}
+
+/* RESPONSIVENESS: Stack vertically on phones */
+@media (max-width: 768px) {
+    .card-container {
+        grid-template-columns: 1fr; /* 1 column on mobile */
+    }
+    
+    .card {
+        height: 400px; /* Slightly shorter on mobile */
+    }
+}
+
+
+/* CHAT INTERFACE */
+#chat-box { 
+    background-color: #f4f4f5; 
+    color: #1a1a1b; 
+    border: 1px solid #e5e7eb;
+    height: 300px; 
+    padding: 15px; 
+    border-radius: 8px; 
+    overflow-y: auto; 
+}
+
+.input-area {
+    display: flex;
+    gap: 10px;
+    margin-top: 10px;
+}
+
+input { 
+    flex-grow: 1;
+    background: #ffffff; 
+    color: #000000; 
+    border: 1px solid #d1d5db; 
+    padding: 10px; 
+}
+
+/* GLITCH & TYPING EFFECTS */
+.typing::after {
+    content: "|";
+    animation: blink 0.7s infinite;
+}
+
+@keyframes blink { 50% { opacity: 0; } }
+
+.glitch { position: relative; color: #000; font-weight: 700; }
+.glitch::before, .glitch::after {
+    content: attr(data-text);
+    position: absolute;
+    top: 0; left: 0; width: 100%; height: 100%;
+    background: #f4f4f5;
+}
+
+.glitch::before {
+    left: 2px;
+    text-shadow: -2px 0 #ff00c1;
+    clip: rect(44px, 450px, 56px, 0);
+    animation: glitch-anim 5s infinite linear alternate-reverse;
+}
+
+.glitch::after {
+    left: -2px;
+    text-shadow: -2px 0 #00fff9;
+    clip: rect(44px, 450px, 56px, 0);
+    animation: glitch-anim2 5s infinite linear alternate-reverse;
+}
+
+@keyframes glitch-anim {
+    0% { clip: rect(31px, 9999px, 94px, 0); }
+    100% { clip: rect(89px, 9999px, 100px, 0); }
+}
+
+@keyframes glitch-anim2 {
+    0% { clip: rect(65px, 9999px, 100px, 0); }
+    100% { clip: rect(10px, 9999px, 30px, 0); }
+}
+
+/* RESPONSIVENESS (The Modern Media Queries) */
+/* this is up in the card section */
+/* @media (min-width: 600px) {
+    body { padding: 40px 20px; }
+    
+    .card-container { 
+        display: grid;
+        grid-template-columns: 1fr 1fr; 
+    }
+} */
+
+/* Header Layout */
+header {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    padding: 15px 5%;
+    border-bottom: 1px solid var(--border);
+    margin-bottom: 30px;
+}
+
+/* Logo Sizing */
+.site-logo {
+    height: 45px; /* Adjust this to fit your header height */
+    width: auto;
+    display: block;
+}
+
+/* Quote Styling */
+.header-right {
+    text-align: right;
+    max-width: 360px; /* Prevents quote from crowding the logo */
+}
+
+.header-quote {
+    font-style: italic;
+    font-size: 0.85rem;
+    color: #666;
+    margin: 0;
+    line-height: 1.2;
+}
+
+/* Responsive adjustment for header */
+@media (max-width: 600px) {
+    header {
+        flex-direction: column;
+        gap: 15px;
+        text-align: center;
+    }
+    .header-right {
+        text-align: center;
+    }
+    .header-quote {
+        font-size: 0.75rem;
+    }
+}
+
+/* header glitch stuff for typing the quote */
+/* Specific override for the header glitch to match white background */
+header .glitch::before, 
+header .glitch::after {
+    background: #ffffff; /* Match the header bg */
+}
+
+/* Let's make the header glitch a bit more subtle than the bot */
+header .glitch:hover::before {
+    animation: glitch-anim 0.2s infinite linear alternate-reverse;
+}
+
+header .glitch:hover::after {
+    animation: glitch-anim2 0.2s infinite linear alternate-reverse;
+}
+
+
+
+
+/* --- NEW CLEANER FOOTER STYLES --- */
+.site-footer {
+    display: flex;
+    justify-content: space-between;
+    align-items: stretch; 
+    width: 100%;
+    min-height: 275px;
+    padding: 20px 5% 40px 5%;
+    background-color: #ffffff;
+    border-top: 1px solid var(--border);
+    box-sizing: border-box;
+    margin-top: 60px;
+}
+
+.footer-column {
+    flex: 1;
+    display: flex;
+    flex-direction: column;
+    justify-content: flex-end; /* Anchors text to bottom */
+    align-items: center;      /* Centers text horizontally in its 1/3rd */
+    padding-bottom: 10px;
+}
+
+.footer-text {
+    margin: 0;
+    white-space: nowrap;      /* Keeps "World Wide Widgets" on one line */
+    font-weight: 500;
+}
+
+.footer-center {
+    justify-content: center;   /* Keeps the image vertically centered */
+}
+
+.footer-graphic {
+    max-height: 180px;
+    width: auto;
+    max-width: 100%;
+    display: block;
+}
+
+.footer-right {
+    gap: 5px;                 
+}
+
+.footer-email, .upwork-link {
+    margin: 0;
+    text-align: center;      
+    font-size: 0.9rem;
+    text-decoration: none;
+    color: var(--text);
+}
+
+.upwork-link {
+    font-weight: 700;
+    text-decoration: underline;
+}
+
+/* RESPONSIVE: Stack on phones */
+@media (max-width: 768px) {
+    .site-footer {
+        flex-direction: column;
+        height: auto;
+        gap: 40px;
+        padding-bottom: 40px;
+    }
+    .footer-column {
+        justify-content: center;
+    }
+}
+
+
+
+.upwork-link {
+    color: var(--accent);
+    text-decoration: underline;
+    font-weight: 700;
+}
+
+
+
