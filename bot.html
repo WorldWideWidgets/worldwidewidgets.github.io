@@ -1,36 +1,125 @@
 <!DOCTYPE html>
 <html lang="en">
 <head>
-    <link rel="icon" type="image/x-icon" href="/favicon.ico">
-    
-    <link rel="preconnect" href="https://fonts.googleapis.com">
-    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
-    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;700&family=Roboto+Mono&display=swap" rel="stylesheet">
-    
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>AI Assistant - Crypto-Dev</title>
+    <title>AI Assistant - World Wide Widgets</title>
+    <link rel="icon" type="image/x-icon" href="/favicon.ico">
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;700&family=Roboto+Mono&family=Roboto:wght@100;300&display=swap" rel="stylesheet">
+    <!-- Leaflet CSS -->
+    <link rel="stylesheet" href="https://unpkg.com" crossorigin="" />
+    <!-- Leaflet JS -->
+    <script src="https://unpkg.com" crossorigin=""></script>
+
     <link rel="stylesheet" href="style.css">
 </head>
 <body>
     <div id="header-site"></div>
-    <div class="container">
-        <nav><a href="index.html">← Back to Home</a></nav>
-        <h2>AI Assistant Demo</h2>
-        <p>Ask me for some project wisdom!</p>
 
-        <!-- Removed all inline styles so style.css works -->
-        <div id="chat-box">
-            <div class="bot-msg"><b>Bot:</b> Hello! I'm your AI demo. Type something for a joke.</div>
+    <main class="container">
+        <nav class="back-nav"><a href="index.html">← Back to Home</a></nav>
+        
+        <section class="intro-section">
+            <h2 class="noir-title">
+                <span class="accent-green">T</span>he 
+                <span class="accent-green">C</span>ooperative 
+                <span class="accent-green">P</span>rinciple 
+                in <span class="accent-green">M</span>achine <span class="accent-green">L</span>earning
+            </h2>
+            <p class="noir-body">
+                If you're an attentive reader you'll notice I dropped <strong>Grice</strong> into the title card on the front. 
+                As a linguist, I believe better chatbots adhere to the maxims of human cooperation.
+            </p>
+            <p class="noir-body">
+                Most "Chatbots" are simply functional interfaces masquerading as conversation. 
+                The world is bifurcated: <strong>Information Seeking</strong> vs. <strong>Conversational</strong>.
+            </p>
+        </section>
+
+        <section class="deconstruction-zone">
+            <h3 class="noir-subtitle">Phase 1: The "Defective" Script</h3>
+            <p class="noir-body">
+                This is engagement without state; an over-engineered search bar. It ignores the 
+                <strong>Maxim of Relation</strong> because it doesn't know who or where you are.
+            </p>
+
+            <div class="chat-wrapper">
+                <div id="chat-box">
+                    <div class="bot-msg"><b>Bot:</b> Hello! Ask me for a joke.</div>
+                </div>
+                <div class="input-area">
+                    <input type="text" id="user-input" placeholder="Say hello...">
+                    <button class="btn-send">Send</button>
+                </div>
+            </div>
+        </section>
+
+        <section class="deconstruction-suite container">
+    <h3 class="noir-subtitle">The Side-by-Side Reality</h3>
+    <p class="noir-body">
+        Observe the same data delivery in a completely different way. On the left, the "Chatbot" adds artificial latency to simulate a persona. On the right, the "Widget" delivers the truth instantly. Without having to do a tremendous amount of introspection, you'll note the internet is full of sites like this. They're like ad word slot machines. 
+    </p>
+
+    <div class="split-view">
+        <!-- Side A: The Engagement Bot -->
+        <div class="view-side engagement-side">
+            <h4>Engagement Layer</h4>
+            <div id="chat-box-2" class="chat-mini">
+                <div class="bot-msg">Ready for a joke?</div>
+            </div>
+            <div class="input-area-mini">
+                <button id="btn-bot-joke">Ask the Bot</button>
+            </div>
         </div>
 
-        <div class="input-area">
-            <input type="text" id="user-input" placeholder="Say hello...">
-            <button>Send</button>
+        <!-- Side B: The Functional Widget -->
+         <div class="view-side functional-side">
+            <h4>Functional Layer</h4>
+            <div id="ad-content">
+                <p class="ad-text">System Idle. Awaiting Trigger...</p>
+            </div>
+            <!-- The Bot button drives both sides -->
         </div>
     </div>
+</section>
+
+<section class="transformation-zone container">
+    <h2 class="noir-title">
+        <span class="accent-green">P</span>hase 2: 
+        <span class="accent-green">C</span>ontextual 
+        <span class="accent-green">I</span>ntelligence
+    </h2>
+    <p class="noir-body">
+        To move from a "script" to a "partner," a system must understand your <strong>Where</strong> and your <strong>When</strong>. Imagine a virtual assistant booking a train from Princeton Junction to DC; it doesn't ask for your life story—it asks the relevant details. How many seats do you need? What date are you travelling? What time of day? Regional or Acela? Business or coach? .
+    </p>
+    <p class="noir-body">
+        In our case, to discuss the week's text meaningfully, the system needs the precise timing of the Sabbos candle lighting. We could force you through four dropdown menus and a stack of ambiguous address fields—a relic of the 1990s web.  Like with any good personal assistant, we should either prompt you, verbally or with text. Or really, since we're a chatbot we should be able to get it out of casual but directed conversation. 
+    </p>
+    <p class="noir-body">
+        Instead, we use <strong>Coordinate Truth</strong>. One pin. One click. High-precision data that respects the <strong>Maxim of Quantity</strong>: giving the machine exactly what it needs to be cooperative, and nothing more.
+    </p>
+</section>
+
+<!-- THE MAP CONTAINER -->
+<section class="map-section container">
+    <h3 class="noir-subtitle">Drop Your Pin</h3>
+    <div id="map-container">
+        <!-- Leaflet Map will be injected here -->
+    </div>
+    <div class="map-controls">
+        <p id="coord-display" class="noir-body" style="font-size: 0.9rem;">Coordinates: Awaiting Selection...</p>
+        <button class="btn-send" id="btn-confirm-coords">Confirm Location</button>
+    </div>
+</section>
+
+
+    </main>
+
     <div id="footer-site"></div>
     <script type="module" src="main.js"></script>
-
 </body>
 </html>
+
+
