@@ -1,5 +1,57 @@
-// main.js - ES Module
+//  main.js - ES Module
 
+// map stuff including a helper function 
+let map; 
+let marker = null; // Explicitly initialize as null
+
+function initMap() {
+    const mapElement = document.getElementById('map-container');
+    if (!mapElement) return;
+
+    // 1. Initialize Map: Centered at a neutral zoom (World View)
+    // [20, 0] is roughly center-map; zoom 2 shows most continents
+    //map = L.map('map-container').setView([20, 0], 2);
+    map = L.map('map-container', {
+        minZoom: 2,
+        worldCopyJump: false // Prevents the map from jumping between world copies
+    }).setView([40.3488, -74.6022], 7);
+
+    // 2. Add the "Noir" Tiles (CartoDB Positron) - FIXED URL
+    L.tileLayer('https://{s}.basemaps.cartocdn.com/light_all/{z}/{x}/{y}{r}.png', {
+        attribution: '&copy; <a href="https://www.openstreetmap.org">OpenStreetMap</a> contributors &copy; <a href="https://carto.com">CARTO</a>',
+        subdomains: 'abcd',
+        maxZoom: 20
+    }).addTo(map);
+
+    // This prevents the user from dragging the map into the gray void
+    const southWest = L.latLng(-89.9, -179.9);
+    const northEast = L.latLng(89.9, 179.9);
+    const bounds = L.latLngBounds(southWest, northEast);
+    map.setMaxBounds(bounds);
+    map.on('drag', function() {
+        map.panInsideBounds(bounds, { animate: false });
+    });
+
+    // 3. The "Pin Drop" Event
+    map.on('click', function(e) {
+        const wrappedLatLng = e.latlng.wrap(); 
+        const { lat, lng } = wrappedLatLng;
+        const display = document.getElementById('coord-display');
+
+        if (marker) {
+            marker.setLatLng(wrappedLatLng);
+        } else {
+            marker = L.marker(wrappedLatLng).addTo(map);
+        }
+
+        if (display) {
+            display.innerHTML = `LAT: ${lat.toFixed(4)} | LON: ${lng.toFixed(4)}`;
+        }
+        // Log for our future API calls
+        console.log(`Coordinate Truth Captured: ${lat}, ${lng}`);
+    });
+}
+        
 // 1. Helper: Delay function
 const sleep = (ms) => new Promise(resolve => setTimeout(resolve, ms));
 
@@ -137,35 +189,6 @@ async function updateDeconstruction() {
     }
 }
 
-// async function updateDeconstruction() {
-//     const adBox = document.getElementById('ad-content');
-//     const botBox = document.getElementById('chat-box-2');
-//     if (!adBox || !botBox) return;
-
-//     try {
-//         const response = await fetch('https://official-joke-api.appspot.com/jokes/random');
-//         const joke = await response.json();
-
-//         // 1. Update Functional Layer (Instant)
-//         const randomAd = adTextPool[Math.floor(Math.random() * adTextPool.length)];
-//         adBox.innerHTML = `
-//             <div class="ad-card">
-//                 <img src="https://loremflickr.com{Date.now()}" alt="Contextual Ad">
-//                 <p><strong>${joke.setup}</strong></p>
-//                 <p>${joke.punchline}</p>
-//                 <span class="ad-tag">Sponsor: ${randomAd}</span>
-//             </div>
-//         `;
-
-//         // 2. Update Engagement Layer (Simulated Chat)
-//         botBox.innerHTML += `<div class="bot-msg"><b>Bot:</b> ${joke.setup} ... ${joke.punchline}</div>`;
-//         botBox.scrollTop = botBox.scrollHeight;
-
-//     } catch (e) {
-//         adBox.innerHTML = "API Connection Lost.";
-//     }
-// }
-
 // 4. Initialization
 async function init() {
     // 4a. Load the header
@@ -185,7 +208,24 @@ async function init() {
         if (yearSpan) yearSpan.textContent = new Date().getFullYear();
     });
 
-    // 4d. Listeners for original Chatbot
+    // 4d. Fire up the Leaflet engine
+    await initMap(); 
+
+    // .. AND setup the "Coordinate" button listener
+    const confirmBtn = document.getElementById('btn-confirm-coords');
+    if (confirmBtn) {
+        confirmBtn.addEventListener('click', () => {
+            if (!marker) {
+                alert("Please drop a pin on the map first.");
+                return;
+            }
+            const coords = marker.getLatLng();
+            console.log("Confirmed Coordinates:", coords);
+            // Next: trigger API chain here!
+        });
+    }
+
+    // 4e. Listeners for original Chatbot
     const sendBtn = document.querySelector('.input-area button');
     const inputField = document.getElementById('user-input');
 
@@ -196,30 +236,15 @@ async function init() {
         });
     }
 
-    // 4e. Listeners for Deconstruction Suite (NEW)
-    // const botJokeBtn = document.getElementById('btn-bot-joke');
-    // const directJokeBtn = document.getElementById('btn-direct-joke');
 
-    // if (botJokeBtn) botJokeBtn.addEventListener('click', updateDeconstruction);
-    // if (directJokeBtn) directJokeBtn.addEventListener('click', updateDeconstruction);
-    //
-    // 5. Listeners for Deconstruction Suite (plus debug)
+    // 5. Unified Listener for Deconstruction Suite
     const botJokeBtn = document.getElementById('btn-bot-joke');
-    const directJokeBtn = document.getElementById('btn-direct-joke');
+
+    // We only run this if the button actually exists (i.e., we are on bot.html)
     if (botJokeBtn) {
         botJokeBtn.addEventListener('click', updateDeconstruction);
-        console.log("Bot Joke Button: Ready"); // Debug check
-    } else {
-        console.warn("Bot Joke Button: Not found in DOM");
+        console.log("Deconstruction Suite: Active");
     }
-    
-    if (dkirectJokeBtn) {
-        directJokeBtn.addEventListener('click', updateDeconstruction);
-        console.log("Direct Joke Button: Ready"); // Debug chec
-    } else {
-        console.warn("Direct Joke Button: Not found in DOM");
-    }
-
 
 }
 

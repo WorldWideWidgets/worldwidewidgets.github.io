@@ -275,14 +275,22 @@ header .glitch:hover::after {
 
 /* MAPS!! */
 
+/* --- Phase 2: The Map Section --- */
+
+.map-section {
+    margin-top: 40px;
+    margin-bottom: 60px;
+}
+
 #map-container {
-    height: 400px;
+    height: 450px; /* Fixed height is mandatory for Leaflet */
     width: 100%;
-    border: 2px solid #333;
+    border: 2px solid #333; /* Noir Frame */
     border-radius: 8px;
-    margin-bottom: 15px;
-    background: #eee; /* Placeholder before Leaflet loads */
-    z-index: 1; /* Ensures it stays under header menus */
+    margin-bottom: 20px;
+    background: #eee; 
+    z-index: 1; /* Keep it below the header site */
+    box-shadow: 0 4px 15px rgba(0,0,0,0.05);
 }
 
 .map-controls {
@@ -290,17 +298,64 @@ header .glitch:hover::after {
     justify-content: space-between;
     align-items: center;
     gap: 20px;
+    background: #fafafa;
+    padding: 15px;
+    border-radius: 8px;
+    border: 1px solid var(--border);
 }
 
 #coord-display {
-    margin: 0;
-    font-family: 'Roboto Mono', monospace; /* Mono for technical data */
+    background: #222;
     color: var(--brand-green);
+    padding: 8px 15px;
+    border-radius: 4px;
+    font-weight: 700;
+    font-family: 'Roboto Mono', monospace; /* Technical "Truth" look */
+    letter-spacing: 1px;
+    border: 1px solid var(--brand-green);
+    min-width: 280px; /* Prevents container from jumping when coordinates update */
+    text-align: center;
+    font-size: 0.9rem;
 }
 
+/* Leaflet Internal Overrides */
+.leaflet-container {
+    font-family: 'Inter', sans-serif !important;
+    z-index: 1 !important;
+}
+
+/* Custom Noir Styling for Zoom Buttons */
+.leaflet-bar {
+    border: 2px solid #333 !important;
+    box-shadow: none !important;
+}
+
+.leaflet-bar a {
+    background-color: #fff !important;
+    color: #333 !important;
+    border-bottom: 1px solid #333 !important;
+}
+
+.leaflet-bar a:hover {
+    background-color: var(--hover-bg) !important;
+    color: var(--brand-green) !important;
+}
+
+/* Responsive for Samsung S23 / Mobile */
 @media (max-width: 600px) {
+    #map-container {
+        height: 320px;
+    }
+    
     .map-controls {
         flex-direction: column;
         text-align: center;
+        padding: 20px;
+    }
+    
+    #coord-display {
+        width: 100%;
+        min-width: unset;
     }
 }
+
