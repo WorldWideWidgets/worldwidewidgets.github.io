@@ -27,7 +27,7 @@ async function typeWriter(text, element, speed = 40) {
     for (let char of text) {
         element.innerHTML += char;
         // Find the closest scrollable container
-        const box = element.closest('#chat-box');
+        const box = element.closest('#chat-box, #chat-box-2'); // Added 2nd box support
         if (box) box.scrollTop = box.scrollHeight;
         await sleep(speed);
     }
@@ -94,13 +94,84 @@ async function getResponse() {
     box.scrollTop = box.scrollHeight;
 }
 
-// 4. Initialization (The "Modern" Way)
-// This attaches the click event automatically when the page loads
+// 3.5 Deconstruction Logic (NEW)
+const adTextPool = [
+    "Upgrade to Pro for more humor!",
+    "World Wide Widgets: Thoroughly Modern.",
+    "First World Solutions for First World Problems.",
+    "Gricean Principles: Better by Design."
+];
+
+async function updateDeconstruction() {
+    const adBox = document.getElementById('ad-content');
+    const botBox = document.getElementById('chat-box-2');
+    if (!adBox || !botBox) return;
+
+    try {
+        const response = await fetch('https://official-joke-api.appspot.com/jokes/random');
+        const joke = await response.json();
+
+        // 1. Functional Layer: Instant Update (No query params, Picsum handles it)
+        const randomAd = adTextPool[Math.floor(Math.random() * adTextPool.length)];
+        const imageUrl = `https://picsum.photos/400/200?grayscale`;
+
+        adBox.innerHTML = `
+            <div class="ad-card">
+                <div class="ad-image-container">
+                    <img src="${imageUrl}" alt="Contextual Ad">
+                </div>
+                <p class="ad-joke-setup"><strong>${joke.setup}</strong></p>
+                <p class="ad-joke-punchline">${joke.punchline}</p>
+                <span class="ad-tag">Sponsor: ${randomAd}</span>
+            </div>
+        `;
+
+        // 2. Engagement Layer: Persistent Scrollable Conversation
+        botBox.innerHTML += `<div class="bot-msg"><b>Bot:</b> ${joke.setup} ... ${joke.punchline}</div>`;
+        
+        // Auto-scroll the mini-bot window
+        botBox.scrollTop = botBox.scrollHeight;
+
+    } catch (e) {
+        adBox.innerHTML = "API Connection Lost.";
+    }
+}
+
+// async function updateDeconstruction() {
+//     const adBox = document.getElementById('ad-content');
+//     const botBox = document.getElementById('chat-box-2');
+//     if (!adBox || !botBox) return;
+
+//     try {
+//         const response = await fetch('https://official-joke-api.appspot.com/jokes/random');
+//         const joke = await response.json();
+
+//         // 1. Update Functional Layer (Instant)
+//         const randomAd = adTextPool[Math.floor(Math.random() * adTextPool.length)];
+//         adBox.innerHTML = `
+//             <div class="ad-card">
+//                 <img src="https://loremflickr.com{Date.now()}" alt="Contextual Ad">
+//                 <p><strong>${joke.setup}</strong></p>
+//                 <p>${joke.punchline}</p>
+//                 <span class="ad-tag">Sponsor: ${randomAd}</span>
+//             </div>
+//         `;
+
+//         // 2. Update Engagement Layer (Simulated Chat)
+//         botBox.innerHTML += `<div class="bot-msg"><b>Bot:</b> ${joke.setup} ... ${joke.punchline}</div>`;
+//         botBox.scrollTop = botBox.scrollHeight;
+
+//     } catch (e) {
+//         adBox.innerHTML = "API Connection Lost.";
+//     }
+// }
+
+// 4. Initialization
 async function init() {
-    // 1. Load the header
+    // 4a. Load the header
     await loadComponent('header-site', 'header.html');
     
-    // 2. Target the quote for a typewriter entrance
+    // 4b. Target the quote for a typewriter entrance
     const quoteElement = document.querySelector('.header-quote');
     if (quoteElement) {
         const finalLine = quoteElement.getAttribute('data-text');
@@ -108,13 +179,13 @@ async function init() {
         await typeWriter(finalLine, quoteElement, 50); // Type it out!
     }
 
-    // ... the rest of the loadComponent stuff... 
+    // 4c. Load footer
     loadComponent('footer-site', 'footer.html').then(() => {
         const yearSpan = document.getElementById('current-year');
         if (yearSpan) yearSpan.textContent = new Date().getFullYear();
     });
 
-
+    // 4d. Listeners for original Chatbot
     const sendBtn = document.querySelector('.input-area button');
     const inputField = document.getElementById('user-input');
 
@@ -124,6 +195,32 @@ async function init() {
             if (e.key === 'Enter') getResponse();
         });
     }
+
+    // 4e. Listeners for Deconstruction Suite (NEW)
+    // const botJokeBtn = document.getElementById('btn-bot-joke');
+    // const directJokeBtn = document.getElementById('btn-direct-joke');
+
+    // if (botJokeBtn) botJokeBtn.addEventListener('click', updateDeconstruction);
+    // if (directJokeBtn) directJokeBtn.addEventListener('click', updateDeconstruction);
+    //
+    // 5. Listeners for Deconstruction Suite (plus debug)
+    const botJokeBtn = document.getElementById('btn-bot-joke');
+    const directJokeBtn = document.getElementById('btn-direct-joke');
+    if (botJokeBtn) {
+        botJokeBtn.addEventListener('click', updateDeconstruction);
+        console.log("Bot Joke Button: Ready"); // Debug check
+    } else {
+        console.warn("Bot Joke Button: Not found in DOM");
+    }
+    
+    if (dkirectJokeBtn) {
+        directJokeBtn.addEventListener('click', updateDeconstruction);
+        console.log("Direct Joke Button: Ready"); // Debug chec
+    } else {
+        console.warn("Direct Joke Button: Not found in DOM");
+    }
+
+
 }
 
 // Run immediately if the DOM is already ready, otherwise wait
@@ -132,4 +229,3 @@ if (document.readyState === 'loading') {
 } else {
     init();
 }
-
