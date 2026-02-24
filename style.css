@@ -104,23 +104,6 @@ header {
     }
 }
 
-/* header glitch stuff for typing the quote */
-/* Specific override for the header glitch to match white background */
-/* header .glitch::before, 
-header .glitch::after {
-    background: #ffffff; 
-}
-
-header .glitch:hover::before {
-    animation: glitch-anim 0.2s infinite linear alternate-reverse;
-}
-
-header .glitch:hover::after {
-    animation: glitch-anim2 0.2s infinite linear alternate-reverse;
-}
- */
-
-
 
 /* --- NEW CLEANER FOOTER STYLES --- */
 .site-footer {
@@ -357,5 +340,33 @@ header .glitch:hover::after {
         width: 100%;
         min-width: unset;
     }
+
+    #coordinate-truth-box {
+      margin-top: 20px;
+      padding: 25px;
+      border: 2px solid var(--brand-green);
+      border-radius: 8px;
+      background-color: #fafafa;
+      font-family: 'Roboto', sans-serif;
+      font-weight: 300;
+      line-height: 1.8;
+      display: none; /* Hidden until context is acquired */
+    }
+
+  .truth-title {
+    font-weight: 700;
+    font-size: 0.9rem;
+    text-transform: uppercase;
+    letter-spacing: 1px;
+    color: #666;
+    margin-bottom: 10px;
+    display: block;
+  }
+
+  .truth-data {
+    font-size: 1.2rem;
+    color: var(--text);
+  }
+
 }
 

@@ -8,9 +8,6 @@ function initMap() {
     const mapElement = document.getElementById('map-container');
     if (!mapElement) return;
 
-    // 1. Initialize Map: Centered at a neutral zoom (World View)
-    // [20, 0] is roughly center-map; zoom 2 shows most continents
-    //map = L.map('map-container').setView([20, 0], 2);
     map = L.map('map-container', {
         minZoom: 2,
         worldCopyJump: false // Prevents the map from jumping between world copies
@@ -48,6 +45,7 @@ function initMap() {
             display.innerHTML = `LAT: ${lat.toFixed(4)} | LON: ${lng.toFixed(4)}`;
         }
         // Log for our future API calls
+        console.log("Map init finished")
         console.log(`Coordinate Truth Captured: ${lat}, ${lng}`);
     });
 }
@@ -151,6 +149,7 @@ const adTextPool = [
     "Upgrade to Pro for more humor!",
     "World Wide Widgets: Thoroughly Modern.",
     "First World Solutions for First World Problems.",
+    "Your Ad Here!",
     "Gricean Principles: Better by Design."
 ];
 
@@ -214,16 +213,21 @@ async function init() {
     // .. AND setup the "Coordinate" button listener
     const confirmBtn = document.getElementById('btn-confirm-coords');
     if (confirmBtn) {
+        console.log("SUCCESS: Confirm Button found. Attaching listener.");
         confirmBtn.addEventListener('click', () => {
+            console.log("Button Clicked!");
             if (!marker) {
                 alert("Please drop a pin on the map first.");
                 return;
             }
-            const coords = marker.getLatLng();
-            console.log("Confirmed Coordinates:", coords);
-            // Next: trigger API chain here!
+            const coords = marker.getLatLng().wrap();
+            fetchHebcal(coords.lat, coords.lng);
         });
+    } else {
+        // This is your current error - it means the HTML above is missing or misspelled
+        console.error("ERROR: #btn-confirm-coords not found. Is the ID correct in bot.html?");
     }
+
 
     // 4e. Listeners for original Chatbot
     const sendBtn = document.querySelector('.input-area button');
@@ -247,6 +251,76 @@ async function init() {
     }
 
 }
+
+/* Hebcal logic */
+/*
+// [N] const url = `https://www.hebcal.com/api/v1/events?latitude=${lat}&longitude=${lng}&tzid=${tzid}&year=${year}&is_hebrew=false`;
+// [N] const url = `https://www.hebcal.com/api/v1/events?latitude=${lat}&longitude=${lng}&tzid=auto&year=${year}&is_hebrew=false`;
+// [N] const url = `https://www.hebcal.com/shabbat?latitude=${lat}&longitude=${lng}&tzid=auto&year=${year}&is_hebrew=false`;
+// [Y] const url = `https://www.hebcal.com/shabbat?latitude=${lat}&longitude=${lng}&cfg=json`;
+*/
+// main.js
+
+async function fetchHebcal(lat, lng) {
+    const truthBox = document.getElementById('coordinate-truth-box');
+    if (!truthBox) return;
+
+    const url = `https://www.hebcal.com/shabbat?latitude=${lat}&longitude=${lng}&cfg=json`;
+
+    try {
+        const response = await fetch(url);
+        const data = await response.json();
+        
+        // Pass the 'items' array we saw in your console
+        const shabbatContext = formatShabbatTimes(data.items, lat, lng);
+
+        if (shabbatContext) {
+            // Force the box to be visible and inject the Noir-styled data
+            truthBox.style.display = 'block';
+            truthBox.style.opacity = '1'; // Safety check
+            
+            truthBox.innerHTML = `
+                <span class="truth-title">Temporal Context Acquired</span>
+                <div class="truth-data">
+                    <p>Be Here By: <span class="accent-green">${shabbatContext.toBeHereBy}</span></p>
+                    <p>Candle Lighting: <strong>${shabbatContext.candleLighting}</strong></p>
+                    <p>Portion: <span class="accent-green">${shabbatContext.parsha}</span></p>
+                </div>
+            `;
+            
+            truthBox.scrollIntoView({ behavior: 'smooth' });
+            return shabbatContext;
+        }
+    } catch (error) {
+        console.error("Truth Display Failed:", error);
+    }
+}
+
+function formatShabbatTimes(items, lat, lng) {
+    if (!items) return null;
+
+    const candleItem = items.find(i => i.category === 'candles');
+    const parshaItem = items.find(i => i.category === 'parashat');
+  
+    if (candleItem) {
+        // Use the ISO date for precision math
+        const candleTime = new Date(candleItem.date); 
+        const safeArrivalTime = new Date(candleTime.getTime() - (18 * 60000)); 
+        
+        const timeOptions = { hour: 'numeric', minute: '2-digit' };
+
+        return {
+            candleLighting: candleTime.toLocaleTimeString([], timeOptions),
+            toBeHereBy: safeArrivalTime.toLocaleTimeString([], timeOptions),
+            // Clean up the name for the Sefaria API call later
+            parsha: parshaItem ? parshaItem.title.replace('Parashat ', '') : 'N/A'
+        };
+    }
+    return null;
+}
+
+
+
 
 // Run immediately if the DOM is already ready, otherwise wait
 if (document.readyState === 'loading') {

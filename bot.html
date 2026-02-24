@@ -105,13 +105,29 @@
 
 <!-- THE MAP CONTAINER -->
 <section class="map-section container">
-    <h3 class="noir-subtitle">Drop Your Pin</h3>
+    <section class="precision-thesis container">
+    <h3 class="noir-subtitle">Coordinate Precision Crushes Ambiguity</h3>
+    <p class="noir-body">
+        Human language is beautifully imprecise, but for a machine, it is a minefield of ambiguity. In a standard "dropdown" interface, a user might type "Princeton." Does the system assume New Jersey? West Virginia? British Columbia? 
+    </p>
+    <p class="noir-body">
+        The misspelling rate for city names is high, and matching a user's typed string against a limited database list is a "First World Problem" that creates unnecessary friction. We could ask for a Zip Code, but that requires even more localized data processing—a "defective" and high-hassle approach.
+    </p>
+    <p class="noir-body">
+        To be <strong>maximally cooperative</strong>, we bypass the linguistic mess. One pin drop on the map below provides the <strong>Latitude and Longitude</strong>—the only data points required to calculate the exact temporal truth of the Sabbath.
+    </p>
+
     <div id="map-container">
         <!-- Leaflet Map will be injected here -->
     </div>
     <div class="map-controls">
         <p id="coord-display" class="noir-body" style="font-size: 0.9rem;">Coordinates: Awaiting Selection...</p>
         <button class="btn-send" id="btn-confirm-coords">Confirm Location</button>
+    </div>
+
+    <!-- div id="coordinate-truth-box" style="display: none;" -->
+    <div id="coordinate-truth-box">
+       <!-- hebcal data here-->    
     </div>
 </section>
 
