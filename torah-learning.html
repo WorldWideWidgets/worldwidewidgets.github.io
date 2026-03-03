@@ -1,0 +1,115 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Torah Learning - Cooperative Dialogue</title>
+    <link rel="icon" type="image/x-icon" href="/favicon.ico">
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;700&family=Roboto+Mono&family=Roboto:wght@100;300&display=swap" rel="stylesheet">
+    <!-- Leaflet CSS -->
+    <link rel="stylesheet" href="https://unpkg.com/leaflet@1.9.4/dist/leaflet.css" integrity="sha256-p4NxAoJBhIIN+hmNHrzRCf9tD/miZyoHS5obTRR9BMY=" crossorigin=""/>
+    <!-- Leaflet JS -->
+    <script src="https://unpkg.com/leaflet@1.9.4/dist/leaflet.js" integrity="sha256-20nQCchB9co0qIjJZRGuk2/Z9VM+kNiyxNV1lvTlZBo=" crossorigin=""></script>
+   <script type="module" src="torah-learning.js"></script>
+    <link rel="stylesheet" href="style.css">
+</head>
+<body>
+    <div id="header-site"></div>
+
+    <main class="container">
+        <nav class="back-nav"><a href="index.html">← Back to Home</a></nav>
+
+        <!-- STAGE 1: Welcome & Name Input -->
+        <section id="stage-welcome" class="stage">
+            <h1 class="noir-title">
+                <span class="accent-green">T</span>orah 
+                <span class="accent-green">L</span>earning 
+                <span class="accent-green">T</span>hrough 
+                <span class="accent-green">D</span>ialogue
+            </h1>
+            <p class="noir-body">
+                We believe the best learning happens in conversation. Tell us your name, show us where you are, 
+                and we'll help you explore this week's Torah portion with depth and nuance.
+            </p>
+            <div class="welcome-form">
+                <input type="text" id="user-name" placeholder="What's your name?" class="form-input">
+                <button id="btn-continue-to-map" class="btn-send">Continue to Map</button>
+            </div>
+        </section>
+
+        <!-- STAGE 2: Location Selection -->
+        <section id="stage-location" class="stage hidden">
+            <h2 class="noir-subtitle">Where Are You?</h2>
+            <p class="noir-body">
+                Click on the map to mark your location. We'll use this to calculate Shabbat times 
+                and provide context for your learning.
+            </p>
+            <div id="map-container"></div>
+            <div class="map-controls">
+                <p id="coord-display">Coordinates: Awaiting Selection...</p>
+                <button id="btn-confirm-location" class="btn-send">Confirm Location</button>
+            </div>
+        </section>
+
+        <!-- STAGE 3: Torah Context -->
+        <section id="stage-context" class="stage hidden">
+            <div id="shabbat-context" class="context-box">
+                <!-- Hebcal data injected here -->
+            </div>
+            
+            <!-- NEW: Suggestion Box -->
+            <div id="commentary-suggestion" class="hidden"></div>
+
+            <div id="parsha-text" class="parsha-box">
+                <!-- Sefaria data injected here -->
+            </div>
+
+            <!-- NEW: Commentary Reader -->
+            <div id="commentary-reader" class="hidden"></div>
+
+            <div id="parsha-summary" class="summary-box">
+                <!-- LLM summary injected here -->
+            </div>
+        </section>
+
+
+        <!-- STAGE 4: Chat Interface -->
+        <section id="stage-chat" class="stage hidden">
+            <h2 class="noir-subtitle">Let's Discuss</h2>
+            <div id="chat-container">
+                <div id="chat-box" class="chat-box"></div>
+                <div class="chat-input-area">
+                    <input type="text" id="chat-input" placeholder="Ask a question about the parsha...">
+                    <button id="btn-send-message" class="btn-send">Send</button>
+                </div>
+            </div>
+        </section>
+
+        <section id="stage-token-gate" class="final-pivot container hidden">
+    <h2 class="noir-title">
+        <span class="accent-green">P</span>hase 4: 
+        <span class="accent-green">T</span>he 
+        <span class="accent-green">G</span>o-llm
+        <span class="accent-green">D</span>ialogue
+    </h2>
+    <p class="noir-body">
+        You have the context. You have the text. Now, we enter the <strong>Stateful Conversation</strong>. 
+    </p>
+    <p class="noir-body">
+        The full <strong>Torah Go-llm</strong> is a high-compute environment protected by cryptographic tokens to ensure cooperative bandwidth. If you are a potential client or collaborator without a token, email <strong>Godzola</strong> to request an access pass.
+    </p>
+    
+    <div class="cta-wrapper">
+        <!-- This links to our 'Coming Soon' scaffold -->
+        <a href="gollm-chat.html" class="btn-send no-decoration">Enter the Gated Environment →</a>
+    </div>
+</section>
+
+
+    </main>
+
+    <div id="footer-site"></div>
+</body>
+</html>

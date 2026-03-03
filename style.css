@@ -1,372 +1,117 @@
+/* --- 1. CORE VARIABLES & RESET --- */
 :root {
     --bg: #ffffff;
     --text: #000000;
     --border: #e5e7eb;
     --brand-green: #469312;
-    --planet-green: #499611;
+     --planet-green: #499611;
     --chat-bg: #f4f4f5;
+    --hover-bg: #f9fafb;
 }
 
-/* Global Reset */
 * { box-sizing: border-box; }
+
 body {
     font-family: 'Inter', sans-serif;
-    margin: 0;
-    padding: 0;
+    margin: 0; padding: 0;
     background-color: var(--bg);
     color: var(--text);
     line-height: 1.6;
 }
 
-/* Layout */
-.container {
-    max-width: 900px;
-    margin: 0 auto;
-    padding: 40px 20px;
+.container { max-width: 900px; margin: 0 auto; padding: 40px 20px; }
+
+/* --- 2. NOIR TYPOGRAPHY (Roboto) --- */
+.intro-section { font-family: 'Roboto', sans-serif; margin-bottom: 40px; }
+.noir-title { font-weight: 100; font-size: 2.4rem; margin-bottom: 20px; letter-spacing: 1px; }
+.noir-subtitle { font-family: 'Roboto', sans-serif; font-weight: 100; font-size: 1.8rem; border-left: 4px solid var(--brand-green); padding-left: 15px; margin: 40px 0 20px; }
+.noir-body { font-weight: 300; font-size: 1.15rem; color: #333; margin-bottom: 1.5rem; }
+.accent-green { color: var(--brand-green); font-weight: 700; font-size: 1.1em; }
+
+/* --- 3. GLOBAL UI COMPONENTS (Buttons/Inputs) --- */
+.btn-send { 
+    background: black; color: white; border: none; padding: 12px 25px; 
+    border-radius: 8px; cursor: pointer; font-weight: 700; transition: all 0.2s; 
+}
+.btn-send:hover { background: var(--brand-green); transform: translateY(-2px); }
+
+input[type="text"], .form-input { 
+    flex: 1; padding: 12px; border: 1px solid var(--border); 
+    border-radius: 8px; font-family: 'Roboto', sans-serif; font-weight: 300; 
 }
 
-/* Noir Typography */
-.intro-section { font-family: 'Roboto', sans-serif; margin-bottom: 40px; }
-.noir-title { font-weight: 100; font-size: 2.4rem; margin-bottom: 20px; }
-.noir-body { font-weight: 300; font-size: 1.15rem; color: #333; margin-bottom: 1.5rem; }
-.noir-subtitle { font-family: 'Roboto', sans-serif; font-weight: 100; font-size: 1.8rem; border-left: 4px solid var(--brand-green); padding-left: 15px; margin: 40px 0 20px; }
-.accent-green { color: var(--brand-green); font-weight: 700; }
+/* --- 4. NAVIGATION & HEADER/FOOTER --- */
+header { display: flex; justify-content: space-between; align-items: center; padding: 15px 5%; border-bottom: 1px solid var(--border); margin-bottom: 30px; }
+.site-logo { height: 45px; width: auto; display: block; }
+.header-right { text-align: right; max-width: 360px; }
+.header-quote { font-style: italic; font-size: 0.85rem; color: #666; margin: 0; }
 
-/* Home Cards */
+.site-footer { display: flex; justify-content: space-between; align-items: stretch; width: 100%; min-height: 275px; padding: 20px 5% 40px 5%; background: #fff; border-top: 1px solid var(--border); margin-top: 60px; }
+.footer-column { flex: 1; display: flex; flex-direction: column; justify-content: flex-end; align-items: center; padding-bottom: 10px; }
+.footer-graphic { max-height: 180px; width: auto; display: block; }
+
+/* --- 5. PORTFOLIO CARDS --- */
 .card-container { display: grid; grid-template-columns: 1fr 1fr; gap: 24px; }
 .card { display: flex; flex-direction: column; height: 450px; border: 1px solid var(--border); border-radius: 16px; overflow: hidden; text-decoration: none; color: inherit; transition: transform 0.3s; }
 .card:hover { transform: translateY(-8px); border-color: var(--brand-green); }
 .card-image-wrapper { height: 70%; overflow: hidden; }
 .card-image { width: 100%; height: 100%; object-fit: cover; }
 .card-content { height: 30%; padding: 20px; display: flex; flex-direction: column; justify-content: center; }
-.card-content h3 { margin: 0 0 5px; font-weight: 700; }
 
-/* Chatbot Interface */
-.chat-wrapper { max-width: 600px; margin: 0 auto; }
-#chat-box { background: var(--chat-bg); height: 350px; padding: 20px; border-radius: 12px; border: 1px solid var(--border); overflow-y: auto; margin-bottom: 10px; }
-.input-area { display: flex; gap: 10px; }
-input[type="text"] { flex: 1; padding: 12px; border: 1px solid var(--border); border-radius: 8px; }
-.btn-send { background: black; color: white; border: none; padding: 10px 20px; border-radius: 8px; cursor: pointer; font-weight: 700; }
-.btn-send:hover { background: var(--brand-green); }
+/* --- 6. CHATBOT & DECONSTRUCTION --- */
+#chat-box, .chat-mini { background: var(--chat-bg); border: 1px solid var(--border); border-radius: 12px; overflow-y: auto; padding: 20px; }
+#chat-box { height: 350px; margin-bottom: 10px; }
+.chat-mini { height: 250px; font-size: 0.9rem; }
 
-/* Glitch Effects */
-.glitch { position: relative; color: #000; font-weight: 700; }
-.glitch::before, .glitch::after { content: attr(data-text); position: absolute; top: 0; left: 0; width: 100%; height: 100%; background: inherit; }
-.glitch::before { left: 2px; text-shadow: -2px 0 #ff00c1; clip: rect(44px, 450px, 56px, 0); animation: glitch-anim 5s infinite linear alternate-reverse; }
-.glitch::after { left: -2px; text-shadow: -2px 0 #00fff9; clip: rect(44px, 450px, 56px, 0); animation: glitch-anim2 5s infinite linear alternate-reverse; }
+.split-view { display: flex; gap: 30px; margin-top: 20px; }
+.view-side { flex: 1; min-height: 420px; border: 2px solid #333; padding: 24px; border-radius: 8px; background: #fff; display: flex; flex-direction: column; justify-content: space-between; box-shadow: 2px 2px 0px rgba(0,0,0,0.05); }
 
-@keyframes glitch-anim { 0% { clip: rect(31px, 9999px, 94px, 0); } 100% { clip: rect(89px, 9999px, 100px, 0); } }
-@keyframes glitch-anim2 { 0% { clip: rect(65px, 9999px, 100px, 0); } 100% { clip: rect(10px, 9999px, 30px, 0); } }
+/* --- 7. GEOSPATIAL (Maps) --- */
+#map-container { height: 450px; width: 100%; border: 2px solid #333; border-radius: 8px; margin-bottom: 20px; z-index: 1; }
+.map-controls { display: flex; justify-content: space-between; align-items: center; gap: 20px; background: #fafafa; padding: 15px; border-radius: 8px; border: 1px solid var(--border); }
+#coord-display { background: #222; color: var(--brand-green); padding: 8px 15px; border-radius: 4px; font-family: 'Roboto Mono', monospace; font-size: 0.9rem; border: 1px solid var(--brand-green); min-width: 280px; text-align: center; }
 
-/* Header Layout */
-header {
-    display: flex;
-    justify-content: space-between;
-    align-items: center;
-    padding: 15px 5%;
-    border-bottom: 1px solid var(--border);
-    margin-bottom: 30px;
+/* THE GREEN MARKER FIX */
+.leaflet-marker-icon {
+    filter: hue-rotate(45deg) brightness(0.8) saturate(1.5); /* Adjust these to hit brand-green */
 }
 
-/* Logo Sizing */
-.site-logo {
-    height: 45px; /* Adjust this to fit your header height */
-    width: auto;
-    display: block;
-}
+/* --- 8. WIZARD STAGES --- */
+.stage { display: flex; flex-direction: column; gap: 20px; animation: fadeIn 0.5s ease-in; }
+.hidden { display: none !important; }
+.welcome-form { display: flex; gap: 10px; max-width: 500px; }
+.context-box, .parsha-box, .summary-box { padding: 20px; border: 1px solid var(--border); border-radius: 12px; margin-bottom: 20px; background: var(--hover-bg); }
 
-/* Quote Styling */
-.header-right {
-    text-align: right;
-    max-width: 360px; /* Prevents quote from crowding the logo */
-}
+@keyframes fadeIn { from { opacity: 0; transform: translateY(10px); } to { opacity: 1; transform: translateY(0); } }
 
-.header-quote {
-    font-style: italic;
-    font-size: 0.85rem;
-    color: #666;
-    margin: 0;
-    line-height: 1.2;
-}
-
-/* Responsive adjustment for header */
-@media (max-width: 600px) {
-    header {
-        flex-direction: column;
-        gap: 15px;
-        text-align: center;
-    }
-    .header-right {
-        text-align: center;
-    }
-    .header-quote {
-        font-size: 0.75rem;
-    }
-}
-
-
-/* --- NEW CLEANER FOOTER STYLES --- */
-.site-footer {
-    display: flex;
-    justify-content: space-between;
-    align-items: stretch; 
-    width: 100%;
-    min-height: 275px;
-    padding: 20px 5% 40px 5%;
-    background-color: #ffffff;
-    border-top: 1px solid var(--border);
-    box-sizing: border-box;
-    margin-top: 60px;
-}
-
-.footer-column {
-    flex: 1;
-    display: flex;
-    flex-direction: column;
-    justify-content: flex-end; /* Anchors text to bottom */
-    align-items: center;      /* Centers text horizontally in its 1/3rd */
-    padding-bottom: 10px;
-}
-
-.footer-text {
-    margin: 0;
-    white-space: nowrap;      /* Keeps "World Wide Widgets" on one line */
-    font-weight: 500;
-}
-
-.footer-center {
-    justify-content: center;   /* Keeps the image vertically centered */
-}
-
-.footer-graphic {
-    max-height: 180px;
-    width: auto;
-    max-width: 100%;
-    display: block;
-}
-
-.footer-right {
-    gap: 5px;                 
-}
-
-.footer-email, .upwork-link {
-    margin: 0;
-    text-align: center;      
-    font-size: 0.9rem;
-    text-decoration: none;
-    color: var(--text);
-}
-
-.upwork-link {
-    font-weight: 700;
-    text-decoration: underline;
-}
-
-/* RESPONSIVE: Stack on phones */
+/* --- 9. RESPONSIVE --- */
 @media (max-width: 768px) {
-    .site-footer {
-        flex-direction: column;
-        height: auto;
-        gap: 40px;
-        padding-bottom: 40px;
-    }
-    .footer-column {
-        justify-content: center;
-    }
-}
-
-
-
-.upwork-link { color: var(--accent); text-decoration: underline; font-weight: 700; }
-
-
-/* Mobile */
-@media (max-width: 768px) {
-    .card-container { grid-template-columns: 1fr; }
+    .card-container, .split-view, .site-footer, .map-controls { flex-direction: column; }
+    .footer-column, .header-right { text-align: center; }
     .noir-title { font-size: 1.8rem; }
+    #map-container { height: 320px; }
 }
 
-
-/* joke bot as ad spammer */
-.split-view {
-    display: flex;
-    gap: 30px;
-    margin-top: 20px;
+.final-pivot {
+    margin-top: 80px;
+    padding-top: 40px;
+    border-top: 1px solid var(--border);
+    text-align: left;
 }
 
-.chat-mini {
-    background-color: var(--chat-bg);
-    border: 1px solid var(--border);
-    height: 250px; /* Fixed height for scrollability */
-    padding: 15px;
-    border-radius: 8px;
-    overflow-y: auto; /* The magic for scrolling */
-    font-size: 0.9rem;
-    margin-bottom: 10px;
+.cta-wrapper {
+    margin-top: 30px;
 }
 
-/* Update your existing .view-side class */
-.view-side {
-    flex: 1;
-    min-height: 420px; 
-    border: 2px solid #333; /* Darker 2px Noir border */
-    padding: 24px;
-    border-radius: 8px; /* Slightly sharper for the Noir feel */
-    background: #ffffff;
-    display: flex;
-    flex-direction: column;
-    justify-content: space-between;
-    transition: border-color 0.3s ease;
-    box-shadow: 2px 2px 0px rgba(0,0,0,0.05); /* Subtle "printed" shadow */
-}
-
-/* Optional: Highlight the active side slightly on hover */
-.view-side:hover {
-    border-color: var(--brand-green);
-}
-
-.engagement-side h4, .functional-side h4 {
-    font-family: 'Roboto', sans-serif;
-    font-weight: 700;
-    font-size: 0.85rem;
-    text-transform: uppercase;
-    letter-spacing: 1px;
-    margin-bottom: 20px;
-    color: #666;
-}
-
-
-.ad-card img {
-    width: 100%;
-    height: 120px;
-    object-fit: cover;
-    border-radius: 8px;
-    margin-bottom: 10px;
-}
-
-.ad-tag {
-    display: block;
-    font-size: 0.7rem;
-    color: var(--brand-green);
-    margin-top: 10px;
-    font-weight: 700;
-}
-
-@media (max-width: 768px) {
-    .split-view { flex-direction: column; }
-}
-
-/* MAPS!! */
-
-/* --- Phase 2: The Map Section --- */
-
-.map-section {
-    margin-top: 40px;
-    margin-bottom: 60px;
-}
-
-#map-container {
-    height: 450px; /* Fixed height is mandatory for Leaflet */
-    width: 100%;
-    border: 2px solid #333; /* Noir Frame */
-    border-radius: 8px;
-    margin-bottom: 20px;
-    background: #eee; 
-    z-index: 1; /* Keep it below the header site */
-    box-shadow: 0 4px 15px rgba(0,0,0,0.05);
-}
-
-.map-controls {
-    display: flex;
-    justify-content: space-between;
-    align-items: center;
-    gap: 20px;
-    background: #fafafa;
-    padding: 15px;
-    border-radius: 8px;
-    border: 1px solid var(--border);
-}
-
-#coord-display {
-    background: #222;
-    color: var(--brand-green);
-    padding: 8px 15px;
-    border-radius: 4px;
-    font-weight: 700;
-    font-family: 'Roboto Mono', monospace; /* Technical "Truth" look */
-    letter-spacing: 1px;
-    border: 1px solid var(--brand-green);
-    min-width: 280px; /* Prevents container from jumping when coordinates update */
+.no-decoration {
+    text-decoration: none;
+    display: inline-block;
     text-align: center;
-    font-size: 0.9rem;
 }
 
-/* Leaflet Internal Overrides */
-.leaflet-container {
-    font-family: 'Inter', sans-serif !important;
-    z-index: 1 !important;
+/* Add a glow to the final button */
+.cta-wrapper .btn-send {
+    padding: 15px 40px;
+    font-size: 1.1rem;
+    box-shadow: 0 4px 15px rgba(70, 147, 18, 0.2);
 }
-
-/* Custom Noir Styling for Zoom Buttons */
-.leaflet-bar {
-    border: 2px solid #333 !important;
-    box-shadow: none !important;
-}
-
-.leaflet-bar a {
-    background-color: #fff !important;
-    color: #333 !important;
-    border-bottom: 1px solid #333 !important;
-}
-
-.leaflet-bar a:hover {
-    background-color: var(--hover-bg) !important;
-    color: var(--brand-green) !important;
-}
-
-/* Responsive for Samsung S23 / Mobile */
-@media (max-width: 600px) {
-    #map-container {
-        height: 320px;
-    }
-    
-    .map-controls {
-        flex-direction: column;
-        text-align: center;
-        padding: 20px;
-    }
-    
-    #coord-display {
-        width: 100%;
-        min-width: unset;
-    }
-
-    #coordinate-truth-box {
-      margin-top: 20px;
-      padding: 25px;
-      border: 2px solid var(--brand-green);
-      border-radius: 8px;
-      background-color: #fafafa;
-      font-family: 'Roboto', sans-serif;
-      font-weight: 300;
-      line-height: 1.8;
-      display: none; /* Hidden until context is acquired */
-    }
-
-  .truth-title {
-    font-weight: 700;
-    font-size: 0.9rem;
-    text-transform: uppercase;
-    letter-spacing: 1px;
-    color: #666;
-    margin-bottom: 10px;
-    display: block;
-  }
-
-  .truth-data {
-    font-size: 1.2rem;
-    color: var(--text);
-  }
-
-}
-
