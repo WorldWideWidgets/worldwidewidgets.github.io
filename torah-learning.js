@@ -1,19 +1,30 @@
 import { loadComponent, initLeafletMap, typeWriter, sleep } from './services.js';
-import { fetchHebcal, fetchSefariaText, fetchSefariaLinks, fetchCommentaryText } from './api-service.js';
+import { fetchHebcal, fetchSefariaText, fetchSefariaLinks, fetchCommentaryText, fetchParshaAliyot } from './api-service.js';
 
 // IMPORTING YOUR RANKING ENGINE
 import { parseSefariaData } from './sefaria-parser.js';
 import { CommentatorRankingEngine } from './sefaria-commentator-rank.js';
 
 // 1. STATE
+// At the top of torah-learning.js
 let appState = { 
     name: '', 
     lat: null, 
     lng: null, 
     parsha: '', 
     candleLighting: '',
-    rankedCommentaries: [] // Store ranking results here
+    aliyotList: [],      // NEW: Store the list of refs
+    currentAliyahIndex: 0 // NEW: Track current position
 };
+
+// let appState = { 
+//     name: '', 
+//     lat: null, 
+//     lng: null, 
+//     parsha: '', 
+//     candleLighting: '',
+//     rankedCommentaries: [] // Store ranking results here
+// };
 
 
 // 2. UI RENDERING including BiLingaual stuff
@@ -89,26 +100,22 @@ async function loadCommentaryReader(ref) {
     const reader = document.getElementById('commentary-reader');
     if (!reader) return;
 
-    reader.innerHTML = `<div class="noir-body">Loading commentary...</div>`;
+    reader.innerHTML = `<div class="noir-body">Loading ${ref}...</div>`;
     reader.classList.remove('hidden');
 
     const data = await fetchCommentaryText(ref);
     
     if (!data) {
-        reader.innerHTML = `<div class="noir-body error">Could not load commentary.</div>`;
+        reader.innerHTML = `<div class="noir-body error">Could not load commentary for ${ref}.</div>`;
         return;
     }
 
-    // Prepare Texts
-    const userLang = 'en'; // Ready for future language selection
-    
-    // Render using the unified helper
-    const contentHtml = renderBilingualText(data.he, data.text, userLang);
-    
-    // Get Name
-    const commentatorName = data.collectiveTitle?.en || data.title || "Commentary";
+    // Render Content
+    const contentHtml = renderResponsiveText(data.he, data.text);
 
-    // Inject HTML
+    // Get Name: Try indexTitle (e.g., "Rashi"), fallback to collectiveTitle, then to the full title
+    const commentatorName = data.indexTitle || data.collectiveTitle?.en || data.collectiveTitle || "Commentary";
+
     reader.innerHTML = `
         <div class="view-side" style="margin-top: 20px; border: 1px solid var(--border);">
             <h4 class="noir-subtitle">${commentatorName}</h4>
@@ -124,7 +131,7 @@ async function loadCommentaryReader(ref) {
         </div>
     `;
 
-    // Attach Navigation Listeners
+    // Navigation Listeners
     document.getElementById('btn-prev')?.addEventListener('click', () => {
         if (data.prev) loadCommentaryReader(data.prev);
     });
@@ -132,6 +139,7 @@ async function loadCommentaryReader(ref) {
         if (data.next) loadCommentaryReader(data.next);
     });
 }
+
 
 
 // 3. STAGE TRANSITIONS
@@ -152,47 +160,155 @@ async function transitionToMap() {
     });
 }
 
+/**
+ * Builds HTML for Stacked Hebrew/English verses.
+ * @param {Array} hebrewVerses - Array of Hebrew strings
+ * @param {Array} englishVerses - Array of English strings
+ * @returns {string} - HTML string
+ */
+function buildStackedText(hebrewVerses, englishVerses) {
+    // Safety check: ensure we have arrays
+    const heArr = hebrewVerses || [];
+    const enArr = englishVerses || [];
+    
+    // Determine max length to avoid undefined errors
+    const maxLen = Math.max(heArr.length, enArr.length);
+    let html = '';
+
+    for (let i = 0; i < maxLen; i++) {
+        const heText = heArr[i] || '';
+        const enText = enArr[i] || '';
+
+        // Only create a unit if we have content
+        if (!heText && !enText) continue;
+
+        html += `
+            <div class="verse-unit">
+                <div class="hebrew-line">${heText}</div>
+                <div class="english-line">${enText}</div>
+            </div>
+        `;
+    }
+
+    return html;
+}
+
+async function loadAliyahByIndex(index) {
+    if (index < 0 || index >= appState.aliyotList.length) return;
+
+    const ref = appState.aliyotList[index];
+    appState.currentAliyahIndex = index;
+
+    const reader = document.getElementById('parsha-reader');
+    if (!reader) return;
+    reader.innerHTML = `<div class="noir-body">Loading ${ref}...</div>`;
+    reader.classList.remove('hidden');
+
+    const data = await fetchSefariaText(ref);
+    if (!data) {
+        reader.innerHTML = `<div class="noir-body error">Could not load text.</div>`;
+        return;
+    }
+
+    const contentHtml = renderResponsiveText(data.he, data.en);
+    
+    // Create Title: "Ki Tisa: Aliyah 1 (Exodus 30:11)"
+    const aliyahLabel = index < 7 ? `Aliyah ${index + 1}` : (index === 7 ? "Maftir" : "Haftarah");
+    const title = `${appState.parsha}: ${aliyahLabel} (${data.ref})`;
+
+    // Determine Button States
+    const hasPrev = index > 0;
+    const hasNext = index < appState.aliyotList.length - 1;
+
+    reader.innerHTML = `
+        <div class="view-side" style="margin-top: 20px; border: 1px solid var(--border);">
+            <h4 class="noir-subtitle">${title}</h4>
+            <div class="chat-mini" style="height: 300px; overflow-y: auto; background: #fff;">
+                ${contentHtml}
+            </div>
+            
+            <div class="map-controls" style="margin-top: 10px; border: none; background: transparent;">
+                <button id="btn-prev-aliyah" class="btn-send" ${!hasPrev ? 'disabled style="opacity:0.5"' : ''}>← Prev</button>
+                <span class="noir-body" style="font-size: 0.8rem;">Section ${index + 1} of ${appState.aliyotList.length}</span>
+                <button id="btn-next-aliyah" class="btn-send" ${!hasNext ? 'disabled style="opacity:0.5"' : ''}>Next →</button>
+            </div>
+        </div>
+    `;
+
+    // Navigation Listeners
+    document.getElementById('btn-prev-aliyah')?.addEventListener('click', () => {
+        loadAliyahByIndex(index - 1);
+    });
+
+    document.getElementById('btn-next-aliyah')?.addEventListener('click', () => {
+        loadAliyahByIndex(index + 1);
+    });
+}
+
+
 async function transitionToContext() {
     if (!appState.lat) return alert("Please drop a pin on the map.");
 
     const hebcalData = await fetchHebcal(appState.lat, appState.lng);
-    if (!hebcalData) return alert("API Error. Try again.");
+    if (!hebcalData) return alert("API Error. Could not fetch times.");
 
-    // Store Parsha name for later
     appState.parsha = hebcalData.parsha;
 
-    // UI Transition
     document.getElementById('stage-location').classList.add('hidden');
     const contextStage = document.getElementById('stage-context');
     contextStage.classList.remove('hidden');
 
-    // 1. Fetch Parsha Text
-    const sefariaData = await fetchSefariaText(appState.parsha);
-
-    // Inject Bilingual Parsha Text
-    const parshaBox = document.getElementById('parsha-text');
-    // Default to 'en', but ready for future languages
-    const userLang = 'en'; 
-    // Render
-    parshaBox.innerHTML = renderBilingualText(sefariaData.he, sefariaData.text, userLang);
-    // const parshaBox = document.getElementById('parsha-text');
-    
-    if (sefariaData) {
-        parshaBox.innerHTML = `
-            <div class="text-column hebrew-text">${sefariaData.he ? sefariaData.he.join(' ') : 'N/A'}</div>
-            <div class="text-column english-text">${sefariaData.en ? sefariaData.en.join(' ') : 'N/A'}</div>
-        `;
-    }
-
-    // Inject Context Header
     document.getElementById('shabbat-context').innerHTML = `
-        <h3 class="noir-subtitle">Truth Acquired for ${appState.name}</h3>
-        <p class="noir-body">Parsha: <span class="accent-green">${appState.parsha}</span> | Candle Lighting: <strong>${hebcalData.candleLighting}</strong></p>
+        <p class="noir-body">
+            <strong>Location Confirmed.</strong><br>
+            Parsha: <span class="accent-green">${appState.parsha}</span><br>
+            Candle Lighting: <strong>${hebcalData.candleLighting}</strong>
+        </p>
     `;
 
-    // --- NEW FEATURE: RANKING ENGINE INTEGRATION ---
-    await rankAndSuggestCommentary(sefariaData.ref);
+    // 1. Try to Fetch Aliyot
+    const aliyotList = await fetchParshaAliyot(appState.parsha);
+    
+    let startRef = null;
+
+    if (aliyotList && aliyotList.length > 0) {
+        // SUCCESS: We have Aliyot
+        appState.aliyotList = aliyotList;
+        appState.currentAliyahIndex = 0;
+        
+        // Load First Aliyah
+        loadAliyahByIndex(0);
+        
+        // Set startRef for commentary ranking
+        startRef = aliyotList[0];
+    } else {
+        // FALLBACK: Aliyot failed, load whole Parsha
+        console.warn("Aliyot API failed, falling back to full Parsha.");
+        const fullData = await fetchSefariaText(appState.parsha);
+        
+        if (fullData && fullData.ref) {
+            loadParshaReader(fullData.ref, appState.parsha);
+            
+            // CRITICAL: Extract the first verse from the range (e.g., "Exodus 30:11-34:35" -> "Exodus 30:11")
+            // This prevents the 504 Timeout on the commentary API
+            if (fullData.ref.includes('-')) {
+                startRef = fullData.ref.split('-')[0].trim();
+            } else {
+                startRef = fullData.ref; // Single verse
+            }
+        }
+    }
+
+    // 2. Rank Commentary (ONLY on the startRef to avoid Timeout)
+    if (startRef) {
+        await rankAndSuggestCommentary(startRef);
+    } else {
+        console.error("Could not determine start reference for commentary.");
+    }
 }
+
+
+
 
 function getFirstVerseFromRef(ref) {
     // Regex matches: Book Name, Chapter, StartVerse
@@ -212,53 +328,139 @@ function getFirstVerseFromRef(ref) {
 async function rankAndSuggestCommentary(parshaRef) {
     console.log("--- Starting Ranking Process ---");
     
-    // 1. Get First Verse
     const firstVerseRef = getFirstVerseFromRef(parshaRef);
     console.log("1. Fetching links for:", firstVerseRef);
 
-    // 2. Fetch Links
     const links = await fetchSefariaLinks(firstVerseRef);
-    console.log("2. Links found:", links.length, links); // Check if this is > 0
+    console.log("2. Links found:", links.length);
 
     if (!links || links.length === 0) {
         console.warn("No links found. Stopping.");
         return;
     };
 
-    // 3. Parse Links
     const parsed = parseSefariaData({ links }, firstVerseRef);
     const commentaries = parsed.commentaries; 
-    console.log("3. Parsed Commentaries:", commentaries.length, commentaries); // Check if this is > 0
+    console.log("3. Parsed Commentaries:", commentaries.length);
 
-    // 4. Run Ranking Engine
     const engine = new CommentatorRankingEngine();
     const rankedList = await engine.rankCommentaries(commentaries);
-    console.log("4. Ranked List:", rankedList.length, rankedList); // Check if this is > 0
+    console.log("4. Ranked List:", rankedList.length);
 
-    // Store in state
     appState.rankedCommentaries = rankedList;
 
-    // 5. Suggest Top Commentator
     if (rankedList.length > 0) {
         const topPick = rankedList[0];
-        console.log("5. Top Pick:", topPick.commentator);
-        renderCommentarySuggestion(topPick);
-        if (rankedList.length > 5) {
-            console.log("Top Pick:", rankedList[0])
-            console.log("Second:", rankedList[1])
-            console.log("Third:", rankedList[2])
-            console.log("fourth:", rankedList[3])
-            console.log("fifth:", rankedList[4])
-        }
-        // Attach listener
-        document.getElementById('btn-accept-commentary')?.addEventListener('click', () => {
-            const firstRef = topPick.refs[0]; 
-            document.getElementById('commentary-suggestion').classList.add('hidden');
-            loadCommentaryReader(firstRef);
+        
+        // Build the HTML for the Top 10 List
+        let listHtml = '<ul style="list-style: none; padding: 0; margin-top: 10px;">';
+        
+        // Loop through top 10 (or fewer if not available)
+        rankedList.slice(0, 10).forEach((item, index) => {
+            const ref = item.refs[0]; // Get the first reference for this commentator
+            listHtml += `
+                <li style="margin-bottom: 8px; padding: 5px; border-bottom: 1px solid #eee;">
+                    <a href="#" class="commentary-link" data-ref="${ref}" style="text-decoration: none; color: var(--brand-green); font-weight: 600; font-size: 1.1em;">
+                        ${item.commentator}
+                    </a>
+                    <span style="display: block; font-size: 0.85em; color: #666; margin-top: 2px;">
+                        Score: ${item.commentator_rank.toFixed(2)} | Tier: ${item.tier}
+                    </span>
+                </li>
+            `;
         });
+        listHtml += '</ul>';
+
+        // Inject into the suggestion box
+        const suggestionBox = document.getElementById('commentary-suggestion');
+        suggestionBox.innerHTML = `
+            <div class="context-box" style="background: #f9f9f9; border-left: 4px solid var(--brand-green);">
+                <p class="noir-body">
+                    <strong>Algorithm Suggestion:</strong> Our metrics indicate <span class="accent-green">${topPick.commentator}</span> is the most significant commentator for this section.
+                </p>
+                <p class="noir-body" style="margin-top: 10px; font-weight: 700;">
+                    Top 10 Commentaries:
+                </p>
+                ${listHtml}
+            </div>
+        `;
+        suggestionBox.classList.remove('hidden');
+
+        // Attach Event Listeners to the new links
+        suggestionBox.querySelectorAll('.commentary-link').forEach(link => {
+            link.addEventListener('click', (e) => {
+                e.preventDefault();
+                const ref = e.currentTarget.getAttribute('data-ref');
+                
+                // Load the commentary into the reader
+                loadCommentaryReader(ref);
+                
+                // Optional: Scroll to the reader
+                document.getElementById('commentary-reader').scrollIntoView({ behavior: 'smooth' });
+            });
+        });
+
     } else {
         console.warn("Ranking list is empty.");
     }
+}
+
+
+
+/**
+ * Generates HTML for Responsive Reader (Side-by-Side on Desktop, Stacked on Mobile)
+ */
+function renderResponsiveText(hebrewData, englishData) {
+    // Flatten arrays to strings
+    const heText = Array.isArray(hebrewData) ? hebrewData.flat(Infinity).join(' ') : String(hebrewData || '');
+    const enText = Array.isArray(englishData) ? englishData.flat(Infinity).join(' ') : String(englishData || '');
+
+    return `
+        <div class="reader-container">
+            <div class="text-column hebrew-col">${heText}</div>
+            <div class="text-column english-col">${enText}</div>
+        </div>
+    `;
+}
+
+async function loadParshaReader(ref) {
+    const reader = document.getElementById('parsha-reader');
+    if (!reader) return;
+
+    reader.innerHTML = `<div class="noir-body">Loading...</div>`;
+    reader.classList.remove('hidden');
+
+    const data = await fetchSefariaText(ref);
+    if (!data) {
+        reader.innerHTML = `<div class="noir-body error">Could not load text.</div>`;
+        return;
+    }
+
+    // Use the new responsive renderer
+    const contentHtml = renderResponsiveText(data.he, data.en);
+
+    reader.innerHTML = `
+        <div class="view-side" style="margin-top: 20px; border: 1px solid var(--border);">
+            <h4 class="noir-subtitle">${data.ref}</h4>
+            <div class="chat-mini" style="height: 300px; overflow-y: auto; background: #fff;">
+                ${contentHtml}
+            </div>
+            
+            <div class="map-controls" style="margin-top: 10px; border: none; background: transparent;">
+                <button id="btn-prev-parsha" class="btn-send" ${!data.prev ? 'disabled style="opacity:0.5"' : ''}>← Prev</button>
+                <span class="noir-body" style="font-size: 0.8rem;">Navigate Section</span>
+                <button id="btn-next-parsha" class="btn-send" ${!data.next ? 'disabled style="opacity:0.5"' : ''}>Next →</button>
+            </div>
+        </div>
+    `;
+
+    // Attach Navigation
+    document.getElementById('btn-prev-parsha')?.addEventListener('click', () => {
+        if (data.prev) loadParshaReader(data.prev);
+    });
+    document.getElementById('btn-next-parsha')?.addEventListener('click', () => {
+        if (data.next) loadParshaReader(data.next);
+    });
 }
 
 

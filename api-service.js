@@ -37,9 +37,9 @@ function formatShabbatTimes(items) {
 }
 
 // FIXED: Added /api/ to the URL
+// CHANGED: vertical cols, prev and next buttons
 export async function fetchSefariaText(parshaName) {
-    // const enc_parshaName = encodeURIComponent(parshaName);
-    const url = `https://www.sefaria.org/api/texts/${encodeURIComponent(parshaName)}?commentary=0&context=0`;
+    const url = `https://www.sefaria.org/api/texts/${parshaName}?commentary=0&context=0`;
     
     try {
         const response = await fetch(url);
@@ -49,7 +49,9 @@ export async function fetchSefariaText(parshaName) {
         return {
             he: data.he,        // Array of Hebrew verses
             en: data.text,      // Array of English verses
-            ref: data.ref       // e.g., "Genesis 1:1-2:3"
+            ref: data.ref,      // Current Reference
+            prev: data.prev,    // Previous Section Ref
+            next: data.next     // Next Section Ref
         };
     } catch (error) {
         console.error("Sefaria Error:", error);
@@ -58,6 +60,48 @@ export async function fetchSefariaText(parshaName) {
 }
 
 // api-service.js
+
+export async function fetchParshaAliyot(parshaName) {
+    // Use the Index API to get the Aliyot structure (alt_ids)
+    // Example: https://www.sefaria.org/api/index/Ki_Tisa
+    // We replace spaces with underscores for the URL
+    const url = `https://www.sefaria.org/api/index/${encodeURIComponent(parshaName.replace(/ /g, '_'))}`;
+    
+    try {
+        const response = await fetch(url);
+        if (!response.ok) throw new Error('Index API unreachable');
+        const data = await response.json();
+
+        // The Index API returns 'alt_ids' for the Aliyot: { "1": "Exodus 30:11", "2": "..." }
+        if (data.alt_ids) {
+            // Convert the object { "1": "...", "2": "..." } into an array ["...", "..."]
+            const aliyot = Object.values(data.alt_ids);
+            return aliyot;
+        }      
+        return null;
+    } catch (error) {
+        console.error("Error fetching Aliyot:", error);
+        return null;
+    }
+}
+
+
+
+// export async function fetchParshaAliyot(parshaName) {
+//     // Endpoint to get the specific reading sections (Aliyot)
+//     const url = `https://www.sefaria.org/api/calendars/next-read/${encodeURIComponent(parshaName)}`;
+    
+//     try {
+//         const response = await fetch(url);
+//         if (!response.ok) throw new Error('Aliyot API unreachable');
+//         const data = await response.json();
+//         return data;
+//     } catch (error) {
+//         console.error("Error fetching Aliyot:", error);
+//         return null;
+//     }
+// }
+
 
 export async function fetchSefariaLinks(ref) {
     // USE /related/ INSTEAD OF /links/

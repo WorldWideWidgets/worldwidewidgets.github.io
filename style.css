@@ -115,3 +115,89 @@ header { display: flex; justify-content: space-between; align-items: center; pad
     font-size: 1.1rem;
     box-shadow: 0 4px 15px rgba(70, 147, 18, 0.2);
 }
+
+/* --- Single Pasuk Text --- */
+/* The Scrollable Container */
+.parsha-scroll-container {
+    max-height: 350px;      /* Limits height so it doesn't take over the screen */
+    overflow-y: auto;       /* Adds scrollbar only when needed */
+    border: 1px solid var(--border);
+    border-radius: 8px;
+    background: #fff;
+    padding: 15px;
+    margin-top: 10px;
+}
+
+/* The Individual Verse Block */
+.verse-unit {
+    margin-bottom: 15px;
+    padding-bottom: 10px;
+    border-bottom: 1px solid #f0f0f0;
+}
+
+/* Remove border from the last verse so it doesn't double up with the container border */
+.verse-unit:last-child {
+    border-bottom: none;
+    margin-bottom: 0;
+}
+
+/* Hebrew Styling */
+.hebrew-line {
+    text-align: right;
+    direction: rtl;
+    font-family: 'Times New Roman', serif; /* Classic Hebrew font stack */
+    font-size: 1.1em;
+    line-height: 1.5;
+    margin-bottom: 5px;
+}
+
+/* English Styling */
+.english-line {
+    text-align: left;
+    direction: ltr;
+    font-size: 0.95em;
+    color: #333;
+    line-height: 1.5;
+}
+
+/* Add to style.css */
+
+/* Responsive Reader Container */
+.reader-container {
+    display: flex;
+    flex-direction: column; /* Mobile Default: Stacked (Top/Bottom) */
+    gap: 20px;
+    height: 100%;
+    width: 100%;
+}
+
+/* Desktop: Side-by-Side (Hebrew Right, English Left) */
+@media (min-width: 768px) {
+    .reader-container {
+        flex-direction: row-reverse; /* Reverses to put Hebrew on Right */
+    }
+}
+
+/* Shared Column Styles */
+.text-column {
+    flex: 1;
+    overflow-y: auto; /* Allows scrolling within the column if text is long */
+    padding: 0 10px;
+}
+
+.hebrew-col {
+    text-align: right;
+    direction: rtl;
+    font-family: 'Times New Roman', serif;
+    font-size: 1.1em;
+    line-height: 1.6;
+}
+
+.english-col {
+    text-align: left;
+    direction: ltr;
+    font-size: 0.95em;
+    line-height: 1.6;
+    color: #333;
+}
+
