@@ -178,6 +178,60 @@ header { display: flex; justify-content: space-between; align-items: center; pad
     }
 }
 
+/* Add/Update in style.css */
+
+/* The Container for ONE Verse */
+.verse-row {
+    display: flex;
+    flex-direction: row;      /* English Left, Hebrew Right */
+    justify-content: space-between;
+    align-items: flex-start;  /* Align text to top */
+    gap: 20px;                /* Space between English and Hebrew */
+    margin-bottom: 15px;
+}
+
+/* The Columns */
+.en-col {
+    flex: 1;
+    text-align: left;
+    direction: ltr;
+    font-size: 0.95em;
+    line-height: 1.6;
+    color: #333;
+}
+
+.he-col {
+    flex: 1;
+    text-align: right;
+    direction: rtl;
+    font-family: 'Times New Roman', serif;
+    font-size: 1.1em;
+    line-height: 1.6;
+}
+
+/* The Visual Separator */
+.accent-line {
+    height: 1px;
+    background-color: var(--brand-green); /* Green accent line */
+    margin: 10px 0 20px 0; /* Spacing around the line */
+    width: 100%;
+    opacity: 0.5;
+}
+
+/* Mobile Responsiveness: Stack them vertically */
+@media (max-width: 768px) {
+    .verse-row {
+        flex-direction: column; /* Stack English then Hebrew */
+        gap: 10px;
+        border-bottom: 1px solid #eee; /* Fallback border */
+    }
+    
+    /* Adjust order if you want Hebrew on Top for Mobile */
+    .he-col { order: 1; } 
+    .en-col { order: 2; }
+}
+
+
 /* Shared Column Styles */
 .text-column {
     flex: 1;

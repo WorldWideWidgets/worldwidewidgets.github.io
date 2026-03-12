@@ -60,6 +60,56 @@ export async function fetchSefariaText(parshaName) {
 }
 
 // api-service.js
+// api-service.js
+
+// NEW: Fetch Calendar to get Aliyot breakdown
+export async function fetchSefariaCalendar(year, month, day) {
+    // Sefaria Calendar API
+    const url = `https://www.sefaria.org/api/calendars?year=${year}&month=${month}&day=${day}`;
+    try {
+        const response = await fetch(url);
+        if (!response.ok) throw new Error('Calendar API Error');
+        const data = await response.json();
+
+        // Find the Parsha item (usually first, but we filter to be safe)
+        // The structure is calendar_items -> extraDetails -> aliyot
+        const parshaItem = data.calendar_items.find(item => 
+            item.parsha || (item.extraDetails && item.extraDetails.aliyot)
+        );
+
+        if (parshaItem && parshaItem.extraDetails && parshaItem.extraDetails.aliyot) {
+            return {
+                aliyot: parshaItem.extraDetails.aliyot, // ["Exodus 35:1-35:29", ...]
+                parshaName: parshaItem.displayValue.en // "Parashat Vayakhel"
+            };
+        }
+        
+        return null;
+    } catch (error) {
+        console.error("Sefaria Calendar Error:", error);
+        return null;
+    }
+}
+
+// NEW: Fetch specific Hebrew and English texts for a Ref
+export async function fetchAliyahText(ref) {
+    // We run two queries in parallel for efficiency
+    const [enData, heData] = await Promise.all([
+        fetch(`https://www.sefaria.org/api/v3/texts/${encodeURIComponent(ref)}?version=english`).then(r => r.json()),
+        fetch(`https://www.sefaria.org/api/v3/texts/${encodeURIComponent(ref)}?version=hebrew`).then(r => r.json())
+    ]);
+
+    return {
+        he: heData.versions?.[0]?.text || [],
+        en: enData.versions?.[0]?.text || [],
+        ref: enData.ref || heData.ref || ref,
+        prev: enData.prev || null,
+        next: enData.next || null
+    };
+}
+
+// Keep existing fetchHebcal and fetchSefariaLinks
+// ...
 
 export async function fetchParshaAliyot(parshaName) {
     // Use the Index API to get the Aliyot structure (alt_ids)
@@ -84,23 +134,6 @@ export async function fetchParshaAliyot(parshaName) {
         return null;
     }
 }
-
-
-
-// export async function fetchParshaAliyot(parshaName) {
-//     // Endpoint to get the specific reading sections (Aliyot)
-//     const url = `https://www.sefaria.org/api/calendars/next-read/${encodeURIComponent(parshaName)}`;
-    
-//     try {
-//         const response = await fetch(url);
-//         if (!response.ok) throw new Error('Aliyot API unreachable');
-//         const data = await response.json();
-//         return data;
-//     } catch (error) {
-//         console.error("Error fetching Aliyot:", error);
-//         return null;
-//     }
-// }
 
 
 export async function fetchSefariaLinks(ref) {
