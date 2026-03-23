@@ -1,0 +1,76 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Crypto-Clustering Visualisation</title>
+
+  <!-- Google‑fonts (same as the rest of the site) -->
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;700&family=Roboto+Mono&display=swap" rel="stylesheet">
+
+  <!-- Vis.js Styles (Added Here) -->
+  <!-- <link href="https://unpkg.com/vis-network/dist/vis-network.min.css" rel="stylesheet" type="text/css" /> -->
+  <!-- <link href="https://unpkg.com/vis-network/dist/vis-network.min.css" rel="stylesheet" type="text/css" crossorigin="anonymous" /> -->
+  <link href="https://unpkg.com/vis-network@10.0.2/styles/vis-network.min.css" rel="stylesheet" type="text/css" crossorigin="anonymous" />
+
+
+
+  <!-- Master stylesheet – the single source of all visual styling -->
+  <link rel="stylesheet" href="/css/main.css">
+</head>
+
+<body>
+  <!-- Header & Footer will be injected by main.js (same as other pages) -->
+  <div id="header-site"></div>
+
+  <main class="container">
+    <nav class="back-nav"><a href="/index.html">← Back to Home</a></nav>
+
+    <h2 class="noir-title">
+      <span class="accent-green">B</span>lockchain
+      <span class="accent-green">W</span>allet
+      <span class="accent-green">C</span>lustering
+    </h2>
+    <p class="noir-body">
+      Interactive network visualisation of wallet-clustering heuristics.
+      Use the sliders below to adjust the time-window and the minimum
+      co-occurrence threshold and watch the graph reshape in real-time.
+    </p>
+
+    <!-- ====================  CONTROLS ==================== -->
+    <div id="controls">
+      <div class="label">Time Window (Minutes):</div>
+      <input type="range" id="timeSlider" min="1" max="180" value="15">
+      <div><span id="timeValue">45</span> min</div>
+
+      <div class="label" style="margin-left:20px;">Min Co‑occurrences:</div>
+      <input type="range" id="thresholdSlider" min="1" max="20" value="6">
+      <div>Threshold: <span id="thresholdValue">2</span></div>
+
+      <button id="resetBtn">Reset Zoom</button>
+    </div>
+
+    <!-- Stats bar -->
+    <div id="stats">
+      <div class="stat-item">Total Transactions: <span id="txCount">0</span></div>
+      <div class="stat-item">Active Wallets: <span id="walletCount">0</span></div>
+      <div class="stat-item">Detected Edges: <span id="edgeCount">0</span></div>
+    </div>
+
+    <!-- Visualisation canvas -->
+    <div id="wallet-graph-container"></div>
+  </main>
+
+  <div id="footer-site"></div>
+
+  <!-- Load the global bootstrap script (injects header/footer & other utils) -->
+  <script type="module" src="/js/main.js"></script>
+
+  <!--  Must load vis.js library before cluster.js  -->
+  <!-- <script src="https://unpkg.com/vis-network/dist/vis-network.min.js"></script> --> 
+  <script src="https://unpkg.com/vis-network@10.0.2/dist/vis-network.min.js"></script>
+  <script type="module" src="/js/cluster.js"></script>
+</body>
+</html>

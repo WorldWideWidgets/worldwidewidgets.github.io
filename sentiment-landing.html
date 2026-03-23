@@ -1,0 +1,115 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Jargon Buster - Local First AI</title>
+    <link rel="stylesheet" href="/css/main.css">
+    <style>
+        /* Specific styles for the landing page layout */
+        .landing-hero {
+            text-align: center;
+            margin-bottom: 3rem;
+        }
+        .tech-specs {
+            background: rgba(255, 255, 255, 0.03);
+            border-left: 4px solid var(--accent-green);
+            padding: 1.5rem;
+            margin: 2rem 0;
+            font-family: 'Roboto Mono', monospace;
+            font-size: 0.9rem;
+        }
+        .privacy-list {
+            list-style: none;
+            padding: 0;
+        }
+        .privacy-list li {
+            margin-bottom: 1rem;
+            padding-left: 1.5rem;
+            position: relative;
+        }
+        .privacy-list li::before {
+            content: "✔";
+            color: var(--accent-green);
+            position: absolute;
+            left: 0;
+        }
+    </style>
+</head>
+<body>
+
+<div id="header-site"></div>
+
+<main class="container">
+    <nav class="back-nav"><a href="/index.html">← Back to Home</a></nav>
+
+    <div class="landing-hero">
+        <h2 class="noir-title">
+            <span class="accent-green">L</span>ocal
+            <span class="accent-green">F</span>irst
+            <span class="accent-green">AI</span>
+        </h2>
+        <p class="noir-body" style="font-size: 1.2rem; max-width: 800px; margin: 0 auto;">
+            This tool runs a small AI model directly in your browser. No data leaves your device. It will only get downloaded once, unless you delete it. It will get deleted normally whenever you have your browser clean up your cache (or right when you're done using it, if you use a "Private/Incognito" window). Click the button below to proceed to the analyzer and see how it works under the hood.
+        </p>
+    </div>
+
+    <div class="text-content">
+        <h3 class="noir-subtitle">What Happens When You Click "Proceed"?</h3>
+        
+        <p class="noir-body">
+            Unlike most AI tools that send your text to a server farm, this application downloads a small "AI Brain" (a quantized version of a large language model) directly into your browser's memory.
+        </p>
+
+        <div class="tech-specs">
+            <strong>The Download Specs:</strong><br>
+            • Size: ~26MB (About the size of 4 or 5 high-quality photos)<br>
+            • Type: DistilBERT (Quantized for efficiency)<br>
+            • Source: jsDelivr CDN<br>
+            • Frequency: Once. It is cached in your browser for future visits.
+        </div>
+
+        <h3 class="noir-subtitle">Why Build It This Way?</h3>
+        
+        <p class="noir-body">
+            I personally believe in <strong>Privacy by Design</strong>. By running the model locally:
+        </p>
+
+        <ul class="privacy-list">
+            <li><strong>Total Privacy:</strong> Your input text is never sent to any server. It stays on your phone, tablet, or laptop.</li>
+            <li><strong>No Training:</strong> We cannot use your data to train future models.</li>
+            <li><strong>No Targeting:</strong> Since we don't see the data, we can't use it to build advertising profiles.</li>
+            <li><strong>Offline Capable:</strong> Once loaded, it works even if you lose internet connection.</li>
+        </ul>
+
+        <p class="noir-body">
+            It cannot be said enough times <strong>NOBODY</strong> is going to see your conversation. By running the model locally on your device  <strong>NOT OpenAI or Alphabet or Grok or Microsoft or ANY GOVERNMENT or your ex-wife's lawyer... NOBODY</strong> will be privvy to your personal usage patterns orthoughts. That is your call, and what I take to be a 
+            <span class="accent-green">T</span>oroughly
+            <span class="accent-green">M</span>odern design choice. And one I hope will catch on.
+        </p>
+
+        <div class="warning-box" style="background-color: #333; padding: 1.5rem; border-radius: 4px; margin-top: 2rem;">
+            <p class="noir-body" style="margin: 0;">
+                <strong>Note on Browser Cache:</strong> The model is stored in your browser's cache. If you clear your browsing data (or use a "Private/Incognito" window), the model will be removed and will need to be downloaded again next time.
+            </p>
+        </div>
+
+        <div style="text-align: center; margin-top: 3rem;">
+            <p class="noir-body" style="font-size: 0.9rem; color: #888;">
+                By clicking the button below, you agree to download the AI model to your device.
+            </p>
+            <a href="/sentiment.html" class="noir-button" style="display: inline-block; font-size: 1.2rem; padding: 15px 40px;">
+                Proceed to De-coder
+            </a>
+        </div>
+    </div>
+
+</main>
+
+<div id="footer-site"></div>
+
+<!-- Load global bootstrap script -->
+<script type="module" src="/js/main.js"></script>
+
+</body>
+</html>

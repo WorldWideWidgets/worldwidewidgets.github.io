@@ -1,55 +1,88 @@
 <!DOCTYPE html>
 <html lang="en">
 <head>
-    <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>World Wide Widgets | Thoroughly Modern</title>
-    <link rel="icon" type="image/x-icon" href="/favicon.ico">
-    <link rel="preconnect" href="https://fonts.googleapis.com">
-    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
-    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;700&family=Roboto+Mono&display=swap" rel="stylesheet">
-    <link rel="stylesheet" href="style.css">
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>World Wide Widgets | Thoroughly Modern</title>
+
+  <!-- Google‑fonts (unchanged) -->
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;700&family=Roboto+Mono&display=swap" rel="stylesheet">
+  <!-- Master stylesheet – the only stylesheet you need! -->
+  <link rel="stylesheet" href="/css/main.css">
 </head>
+
+
 <body>
-    <div id="header-site"></div>
+  <!-- These empty divs will be filled by main.js -->
+  <div id="header-site"></div>
 
-    <main class="container">
-        <section class="intro-section">
-            <h2 class="noir-title">
-                <span class="accent-green">T</span>horoughly 
-                <span class="accent-green">M</span>odern solutions for a decentralized world
-            </h2>
-            <p class="noir-body">
-                From the algorithmic hunt for liquidity and blockchain fraud detection to human-computer interactions 
-                that extend linguistic and philosophical principles to the LLM era. 
-                <span class="accent-green">W</span>orld <span class="accent-green">W</span>ide <span class="accent-green">W</span>idgets 
-                explores the 'First World Problems' of the digital frontier.
-            </p>
-        </section>
+  <main class="container">
+    <section class="intro-section">
+      <h2 class="noir-title">
+        <span class="accent-green">T</span>horoughly 
+        <span class="accent-green">M</span>odern solutions for a decentralized world
+      </h2>
+      <p class="noir-body">
+        From the algorithmic hunt for liquidity and blockchain fraud detection, to digital privacy in the AI age and human-computer interactions 
+        that extend linguistic and philosophical principles to the LLM era. 
+        <span class="accent-green">W</span>orld <span class="accent-green">W</span>ide <span class="accent-green">W</span>idgets 
+        explores the 'First World Problems' of the digital frontier.
+      </p>
+    </section>
 
-        <div class="card-container">
-            <a href="code.html" class="card">
-                <div class="card-image-wrapper">
-                    <img src="houses.png" alt="Crypto Analysis" class="card-image">
-                </div>
-                <div class="card-content">
-                    <h3>Crypto Portfolio</h3>
-                    <p>Wallet clustering & fraud detection.</p>
-                </div>
-            </a>
-            <a href="bot.html" class="card">
-                <div class="card-image-wrapper">
-                    <img src="main-st-ld-6x7-1.png" alt="AI Chatbot" class="card-image">
-                </div>
-                <div class="card-content">
-                    <h3>AI Chatbots</h3>
-                    <p>Applying the Cooperative Principle (Now with LIVE DEMOS!)</p>
-                </div>
-            </a>
+    <div class="card-container">
+      <!-- Card 1: Crypto (Existing) -->
+      <a href="crypto.html" class="card">
+        <div class="card-image-wrapper">
+          <img src="/img/houses.png" alt="Crypto Analysis" class="card-image">
         </div>
-    </main>
+        <div class="card-content">
+          <h3>Crypto Portfolio</h3>
+          <p>Wallet clustering & fraud detection.</p>
+        </div>
+      </a>
 
-    <div id="footer-site"></div>
-    <script type="module" src="main.js"></script>
+      <!-- Card 2: AI Chatbots (Existing) -->
+      <a href="bot.html" class="card">
+        <div class="card-image-wrapper">
+          <img src="/img/main-st-ld-6x7-1.png" alt="AI Chatbot" class="card-image">
+        </div>
+        <div class="card-content">
+          <h3>AI Chatbots</h3>
+          <p>Applying the Cooperative Principle to Torah Study. Now with <strong>LIVE DEMOS!</strong></p>
+        </div>
+      </a>
+
+      <!-- Card 3: Sentiment -->
+      <a href="sentiment-landing.html" class="card">
+        <div class="card-image-wrapper">
+          <img src="/img/widget-machine-512.png" alt="Sentiment Analysis" class="card-image">
+        </div>
+        <div class="card-content">
+          <h3>Jargon Buster!</h3> 
+          <p>Local First, AI Sentiment, gobbldygook classifier!</p>
+        </div>
+      </a>
+
+      <!-- Card 4: Placeholder -->
+      <a href="index.html" class="card">
+        <div class="card-image-wrapper">
+          <img src="/img/widget-worker.png" alt="Coming Soon" class="card-image">
+        </div>
+        <div class="card-content">
+          <h3>Coming Soon</h3>
+          <p>AI Summaries of four thousand year old texts (and maybe a name + avatar generator!)</p>
+        </div>
+      </a>
+
+    </div>
+  </main>
+
+  <div id="footer-site"></div>
+
+  <!-- Entry point – all site‑wide logic lives here -->
+  <script type="module" src="/js/main.js"></script>
 </body>
 </html>

@@ -12,14 +12,32 @@
     <link rel="stylesheet" href="https://unpkg.com/leaflet@1.9.4/dist/leaflet.css" integrity="sha256-p4NxAoJBhIIN+hmNHrzRCf9tD/miZyoHS5obTRR9BMY=" crossorigin=""/>
     <!-- Leaflet JS -->
     <script src="https://unpkg.com/leaflet@1.9.4/dist/leaflet.js" integrity="sha256-20nQCchB9co0qIjJZRGuk2/Z9VM+kNiyxNV1lvTlZBo=" crossorigin=""></script>
-   <script type="module" src="torah-learning.js"></script>
-    <link rel="stylesheet" href="style.css">
+    <!-- <script type="module" src="/js/torah-learning.js"></script> -->
+    <link rel="stylesheet" href="/css/main.css">
 </head>
 <body>
     <div id="header-site"></div>
 
     <main class="container">
         <nav class="back-nav"><a href="index.html">← Back to Home</a></nav>
+
+        <section id="stage-token-gate" class="final-product container">
+        <h2 class="noir-title">
+        <span class="accent-green">P</span>hase 4: 
+        <span class="accent-green">T</span>he 
+        <span class="accent-green">G</span>o-llm
+        <span class="accent-green">D</span>ialogue
+    </h2>
+    <p class="noir-body">
+        Finally, we are capable of a <span class="accent-green">STATEFUL CONVERSATION</span>!  Go through the widgets and get the context. Then, you'll get the text. 
+        We'll provide a <span class="accent-green">BM25 Ranking Algorithm</span> over thusands of years of commentaries - <b>NO CHARGE!</b>. The next and final step is to use the model 
+        we downloaded for the the sentiment analysis earlier (or a better one for this task) to both generate summaries of things like the commentaries 
+        we have, and engage people in a question and answer forum about their object of study. which is good, because as a general rule, we believe the best 
+        learning happens in conversation. We're not alone here, so did <span class="accent-green">SOCRATES (compare forn the Socratic Method)</span>. 
+    </p>
+    <p class="noir-body">
+        The full <span class="accent-green">Torah Go-llm</span> open-ended dialog is high-compute - and if we didn't architect it to be a local service, the whole environment would need to be protected by cryptographic tokens to ensure cooperative bandwidth. If you wanted to use the service, you would have to subscribe or email <strong>Godzola</strong> to request access. It would be messier. So, start here and have fun in a <span class="accent-green">T</span>horoughly <span class="accent-green">M</span>odern and <span class="accent-green">O</span>en <span class="accent-green">S</span>urce way here.
+    </p>
 
         <!-- STAGE 1: Welcome & Name Input -->
         <section id="stage-welcome" class="stage">
@@ -30,7 +48,7 @@
                 <span class="accent-green">D</span>ialogue
             </h1>
             <p class="noir-body">
-                We believe the best learning happens in conversation. Tell us your name, show us where you are, 
+                As a general rule, we believe the best learning happens in conversation. Tell us your name, show us where you are, 
                 and we'll help you explore this week's Torah portion with depth and nuance.
             </p>
             <div class="welcome-form">
@@ -53,7 +71,6 @@
             </div>
         </section>
 
-        <!-- STAGE 3: Torah Context -->
         <!-- STAGE 3: Torah Context -->
         <section id="stage-context" class="stage hidden">
             <div id="shabbat-context" class="context-box">
@@ -88,29 +105,17 @@
             </div>
         </section>
 
-        <section id="stage-token-gate" class="final-pivot container hidden">
-    <h2 class="noir-title">
-        <span class="accent-green">P</span>hase 4: 
-        <span class="accent-green">T</span>he 
-        <span class="accent-green">G</span>o-llm
-        <span class="accent-green">D</span>ialogue
-    </h2>
-    <p class="noir-body">
-        You have the context. You have the text. Now, we enter the <strong>Stateful Conversation</strong>. 
-    </p>
-    <p class="noir-body">
-        The full <strong>Torah Go-llm</strong> is a high-compute environment protected by cryptographic tokens to ensure cooperative bandwidth. If you are a potential client or collaborator without a token, email <strong>Godzola</strong> to request an access pass.
-    </p>
-    
+    <!--
     <div class="cta-wrapper">
-        <!-- This links to our 'Coming Soon' scaffold -->
-        <a href="gollm-chat.html" class="btn-send no-decoration">Enter the Gated Environment →</a>
+        <a href="gollm-chat.html" class="btn-send no-decoration">Next, we can use the model we downloaded earlier to both generate summaries of things like the commentaries we have, and engage people in a question and answer forum about their object of study.</a>
     </div>
+    -->
 </section>
 
 
     </main>
 
     <div id="footer-site"></div>
+    <script type="module" src="/js/main.js"></script>
 </body>
 </html>

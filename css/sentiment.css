@@ -1,0 +1,160 @@
+/* ==================== CORPORATE DECODER STYLES (LIGHT MODE) ==================== */
+
+.decoder-card {
+    background-color: #ffffff; /* Clean white background */
+    border: 1px solid #ddd;
+    border-radius: 8px;
+    padding: 2.5rem;
+    margin-top: 2rem;
+    box-shadow: 0 4px 15px rgba(0, 0, 0, 0.5);
+    color: #333; /* Dark text for readability */
+}
+
+/* Override Noir Title for Light Background */
+.decoder-card .noir-title {
+    color: #121212; /* Dark text */
+    border-bottom: 2px solid #eee;
+    padding-bottom: 1rem;
+    margin-bottom: 1.5rem;
+}
+
+/* Keep the Green Accent */
+.decoder-card .accent-green {
+    color: #2e7d32; /* Slightly darker green for contrast on white */
+}
+
+.noir-subtitle {
+    font-family: 'Inter', sans-serif;
+    font-size: 1rem;
+    color: #666; /* Softer gray for secondary text */
+    margin-top: -1rem;
+    margin-bottom: 2rem;
+    font-style: italic;
+}
+
+/* Input Area */
+#input-text {
+    width: 100%;
+    height: 120px;
+    background-color: #f5f5f5; /* Slightly off-white input */
+    border: 1px solid #ccc;
+    border-radius: 4px;
+    color: #121212; /* Dark typing text */
+    font-family: 'Roboto Mono', monospace;
+    font-size: 0.95rem;
+    padding: 1rem;
+    resize: vertical;
+    box-sizing: border-box;
+    transition: border-color 0.3s ease;
+}
+
+#input-text:focus {
+    outline: none;
+    border-color: #2e7d32; /* Green focus ring */
+    background-color: #fff;
+}
+
+/* Progress Bar */
+#status {
+    font-family: 'Roboto Mono', monospace;
+    font-size: 0.8rem;
+    color: #555;
+    margin-bottom: 8px;
+}
+
+.progress-bg {
+    background-color: #e0e0e0;
+    height: 6px;
+    border-radius: 3px;
+    overflow: hidden;
+}
+
+.progress-bar {
+    height: 100%;
+    width: 0%;
+    background-color: #2e7d32; /* Darker green */
+    transition: width 0.3s ease;
+}
+
+/* Button */
+.controls {
+    text-align: center;
+    margin-bottom: 2rem;
+}
+
+.noir-button:disabled {
+    border-color: #bbb;
+    color: #bbb;
+    background-color: transparent;
+    cursor: not-allowed;
+}
+
+/* Results */
+#output {
+    border-top: 1px solid #eee;
+    padding-top: 1.5rem;
+    animation: fadeIn 0.5s ease-in-out;
+}
+
+.hidden {
+    display: none;
+}
+
+.result-item {
+    margin-bottom: 1.2rem;
+}
+
+.label {
+    display: block;
+    font-family: 'Roboto Mono', monospace;
+    font-size: 0.75rem;
+    text-transform: uppercase;
+    color: #2e7d32; /* Darker green for contrast */
+    margin-bottom: 4px;
+    letter-spacing: 1px;
+    font-weight: 700;
+}
+
+.highlight {
+    background-color: #e8f5e9; /* Light green highlight */
+    padding: 10px;
+    border-radius: 4px;
+    border-left: 3px solid #2e7d32;
+}
+
+#intent-out {
+    color: #000;
+    font-weight: 500;
+}
+
+#literal-out {
+    color: #555;
+}
+
+#score-out {
+    color: #333;
+    font-family: 'Roboto Mono', monospace;
+}
+
+/* Animation */
+@keyframes fadeIn {
+    from { opacity: 0; transform: translateY(10px); }
+    to { opacity: 1; transform: translateY(0); }
+}
+
+/* Mobile Adjustments */
+@media (max-width: 768px) {
+  .decoder-card {
+    padding: 1.5rem; /* Reduces padding on mobile for more text space */
+    margin-top: 1rem;
+  }
+
+  .noir-title {
+    font-size: 1.5rem; /* Slightly smaller heading on small screens */
+    line-height: 1.2;
+  }
+
+  #input-text {
+    height: 100px; /* Slightly shorter input box to save space */
+  }
+}

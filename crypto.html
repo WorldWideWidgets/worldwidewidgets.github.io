@@ -1,0 +1,292 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <link rel="icon" type="image/x-icon" href="/favicon.ico">
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;700&family=Roboto+Mono&display=swap" rel="stylesheet">
+
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>AI Assistant - Wallet Clustering - Crypto-Dev</title>
+    <link rel="stylesheet" href="/css/main.css">
+</head>
+<body>
+    <div id="header-site"></div>
+    <div class="container">
+        <nav><a href="index.html">← Back to Home</a></nav>
+        <section class="intro-section">
+            <h2 class="noir-title">
+                <span class="accent-green">C</span>rypto 
+                <span class="accent-green">T</span>rading and
+                <span class="accent-green">W</span>allet 
+                <span class="accent-green">F</span>raud
+            </h2>
+            <p class="noir-body">
+                This page is my digression into crypto trading and fraud detection - both of which are 
+                <span class="accent-green">T</span>horoughly 
+                <span class="accent-green">M</span>odern problems. If, however, you just want to skip to the fun, animated part...
+            </p>
+
+            <p class="noir-body">
+                <span class="accent-green">TL;DR</span> this button will skip to the filmstrip...<br>
+                <a href="cluster.html" class="btn-send no-decoration">
+                    Science Series #37 Crypto-Clustering Visualisations</a>
+
+        </section>
+
+        <section>
+                          
+    <div class="terminology-section">
+      <h3 class="noir-title">
+        <span class="accent-green">K</span>ey
+        <span class="accent-green">T</span>erminology
+      </h3>
+      <p class="noir-body" style="margin-bottom: 2rem;">
+        Understanding the language is the first step to understanding the data. Since blockchain and crypto are relatively new, I feel it's important to get our vocab straight. 
+        Admittedly, this is also in some part for my wife and children so when we speak about things like 
+        <span class="accent-green">F</span>ungible <span class="accent-green">T</span>okens we're all on the same page. Here are some essentials.
+        
+        <!-- <br>
+            The vocabulary is followed by a short exposition on distinguishing activities like <span class="accent-green">S</span>murfing and 
+            <span class="accent-green">S</span>tructuring (told ya', see below) from legitimate activity like liquidity chasing and programatic trading. 
+             -->
+      </p>
+
+      <div class="term-grid">
+        <div class="term-card">
+          <h3 class="term-title">Blockchain</h3>
+          <p class="term-def">A digital record book shared across many computers. Once a page is filled and added to the book, it cannot be torn out or changed, making the history permanent and secure.</p>
+        </div>
+
+        <div class="term-card">
+          <h3 class="term-title">Public Ledger</h3>
+          <p class="term-def">The public "account book" for a cryptocurrency. It records every transaction ever made, allowing anyone to verify the history of a coin without needing a bank.</p>
+        </div>
+
+        <div class="term-card">
+          <h3 class="term-title">Wallet</h3>
+          <p class="term-def">A digital tool that stores the "keys" (passwords) needed to access your crypto on the blockchain. It doesn't hold the coins themselves, but proves you own them.</p>
+        </div>
+
+        <div class="term-card">
+          <h3 class="term-title">Address</h3>
+          <p class="term-def">A string of letters and numbers (like a username or email) that represents a specific destination for crypto funds. It is safe to share publicly.</p>
+        </div>
+
+        <div class="term-card">
+          <h3 class="term-title">On-Chain / Off-Chain</h3>
+          <p class="term-def"><strong>On-chain</strong> transactions are recorded directly on the public blockchain. <strong>Off-chain</strong> transactions happen outside the blockchain (like an IOU between friends) and are not immediately visible to the public.</p>
+        </div>
+
+        <div class="term-card">
+          <h3 class="term-title">Fungible</h3>
+          <p class="term-def">Something that can be exchanged one-for-one with another identical item. One dollar bill is worth exactly the same as another dollar bill.</p>
+        </div>
+
+        <div class="term-card">
+          <h3 class="term-title">Non-Fungible Token (NFT)</h3>
+          <p class="term-def">A unique digital asset that cannot be replaced. Unlike a dollar, a specific digital artwork or trading card is one-of-a-kind and cannot be swapped evenly.</p>
+        </div>
+
+        <div class="term-card">
+          <h3 class="term-title">Smart Contract</h3>
+          <p class="term-def">A self-running program stored on the blockchain. It automatically executes actions (like sending money) when specific conditions are met, without needing a lawyer or middleman.</p>
+        </div>
+
+        <div class="term-card">
+          <h3 class="term-title">Gas Fee</h3>
+          <p class="term-def">A small payment made to the network to process a transaction. Think of it like a toll fee you pay to drive on a highway; it pays the computers that keep the network running.</p>
+        </div>
+
+        <div class="term-card">
+          <h3 class="term-title">Mining</h3>
+          <p class="term-def">The process where powerful computers solve complex math problems to verify transactions. As a reward for this work, the computer earns new coins.</p>
+        </div>
+
+        <div class="term-card">
+          <h3 class="term-title">Smurfing (Structuring)</h3>
+          <p class="term-def">Breaking a large amount of money into smaller chunks to move it unnoticed. Criminals do this to avoid triggering "suspicious activity" reports that banks or exchanges are required to file.</p>
+        </div>
+
+        <div class="term-card">
+          <h3 class="term-title">Robot Trading (Bots)</h3>
+          <p class="term-def">Software programs that automatically buy and sell assets based on pre-set rules. They act faster than humans and are often used for high-frequency trading.</p>
+        </div>
+
+        <div class="term-card">
+          <h3 class="term-title">Liquidity Chasing</h3>
+          <p class="term-def">Moving funds specifically to platforms where trading is active and it is easy to cash out. It helps hide illegal funds in the massive flow of legitimate money.</p>
+        </div>
+
+        <div class="term-card">
+          <h3 class="term-title">Private Key</h3>
+          <p class="term-def">A secret password (like a long PIN) that proves you own your crypto wallet. If you lose this, you lose access to your money forever.</p>
+        </div>
+
+        <div class="term-card">
+          <h3 class="term-title">DeFi (Decentralized Finance)</h3>
+          <p class="term-def">Financial services (like loans, trading, or savings) built on blockchains without banks. They run automatically on code and are open to anyone with an internet connection.</p>
+        </div>
+
+        <div class="term-card">
+          <h3 class="term-title">Token</h3>
+          <p class="term-def">A unit of value created on an existing blockchain. Unlike a coin (which has its own network), a token lives on a network like Ethereum.</p>
+        </div>
+
+        <div class="term-card">
+          <h3 class="term-title">KYC (Know Your Customer)</h3>
+          <p class="term-def">The process businesses use to verify the identity of their clients. It is a standard check to prevent money laundering and ensure users are who they say they are.</p>
+        </div>
+      </div>
+      
+      <div class="future-terms">
+        <p><strong>I might define these in the future:</strong> Mixer / Tumbler, Atomic Swap, Bridge, Governance Token, Stablecoin, Hash Rate, 51% Attack.</p>
+      </div>
+    </div>
+
+        </section> <!-- end terminology section -->
+
+    <div class="algorithm-section">
+      <h3 class="noir-title">
+        <span class="accent-green">T</span>he
+        <span class="accent-green">A</span>lgorithm
+      </h3>
+      <p class="noir-body">
+        Finding illicit activity in a sea of transactions is similar to how streaming services recommend movies. It is fundamentally a <strong>similarity problem</strong>. If two wallets interact with each other far more often than random chance would suggest, they are likely coordinating their behavior.
+      </p>
+      <p class="noir-body">
+        Our approach builds a <strong>Co-occurrence Matrix</strong>. Imagine a giant grid where every row and column is a wallet address. If Wallet A sends money to Wallet B, we mark a "1" in that cell. Over time, these numbers grow, revealing hidden networks.
+      </p>
+
+      <h3 class="noir-subtitle">The Matrix Concept</h3>
+      <div class="code-block-container">
+        <pre><code>
+          Wallet Addresses
+          +-----------+-----------+-----------+-----------+
+          |           |  Wallet A |  Wallet B |  Wallet C |
+          +-----------+-----------+-----------+-----------+
+          | Wallet A  |     0     |    14     |     1     |
+          +-----------+-----------+-----------+-----------+
+          | Wallet B  |    14     |     0     |    22     |  <- High Score
+          +-----------+-----------+-----------+-----------+
+          | Wallet C  |     1     |    22     |     0     |
+          +-----------+-----------+-----------+-----------+
+          
+          Interpretation:
+          - Wallets A and B interacted 14 times (Suspiciously High?)
+          - Wallets A and C interacted only 1 time (Likely Random)
+        </code></pre>
+      </div>
+
+      <p class="noir-body">
+        In the visualization above, we built this matrix in real-time. We group transactions into "time buckets" (e.g., 1 hour windows). If two wallets appear in the same bucket repeatedly, the edge between them gets thicker.
+      </p>
+
+      <h3 class="noir-subtitle">The Core Logic</h3>
+      <p class="noir-body">
+        I implemented a "Time-Window Clustering" algorithm. Instead of just looking at who sent money to whom, we look at <em>when</em> they did it. This helps distinguish between legitimate high-volume traders and coordinated structuring rings.
+      </p>
+
+      <div class="code-block-container">
+        <pre><code>
+  function calculateClusters(timeWindowMinutes, minThreshold) {
+    // 1. Create Time Buckets
+    //    Divide the timeline into chunks (e.g., 45 mins)
+    const buckets = {};
+    rawTransactions.forEach(tx => {
+      const bucketID = Math.floor(tx.timeStamp / timeWindowMinutes);
+      // Group addresses that were active at the same time
+      if (!buckets[bucketID]) buckets[bucketID] = new Set();
+      buckets[bucketID].add(tx.from);
+    });
+
+    // 2. Build Adjacency Matrix (Pairwise Counting)
+    //    Count how often two wallets appear in the same bucket
+    const matrix = {};
+    Object.values(buckets).forEach(bucket => {
+      // Iterate through every pair of addresses in the bucket
+      // If they are both there, increment their "closeness" score
+      countCoOccurrences(bucket, matrix); 
+    });
+
+    // 3. Apply Threshold
+    //    Only keep connections that happen more than 'minThreshold' times
+    //    This filters out noise and random one-off transactions
+    const edgeList = filterByThreshold(matrix, minThreshold);
+
+    return { nodes: nodeList, edges: edgeList };
+  }
+        </code></pre>
+      </div>
+
+      <p class="noir-body">
+        By adjusting the <strong>Time Window</strong> and <strong>Threshold</strong> sliders, you can tune the sensitivity. A small time window catches rapid-fire bot activity, while a larger window reveals long-term structuring schemes. I find stuff like this so cool, I dedicated a whole page to it!
+      </p>
+    </div> <!-- end algorithm section -->
+
+        <!-- ====================  HEURISTICS SECTION ==================== -->
+    <div class="heuristics-section">
+      <h2 class="noir-title">
+        <span class="accent-green">H</span>euristics &amp; 
+        <span class="accent-green">A</span>nalysis
+      </h2>
+      <p class="noir-body">
+        Once we have identified a cluster of wallets, the next challenge is determining intent. How do we differentiate between a high-frequency trading bot and a "smurf" (a person hired to structure illicit funds)? Both move fast and both move often, but they leave different digital footprints.
+      </p>
+
+      <div class="heuristic-grid">
+        <!-- Heuristic 1 -->
+        <div class="heuristic-card">
+          <h3 class="heuristic-title">1. The Round Number Test</h3>
+          <p class="noir-body">
+            <strong>Bots:</strong> Operate on precise math. They trade odd amounts like <code>1.342 ETH</code>.
+          </p>
+          <p class="noir-body">
+            <strong>Smurfs:</strong> Operate on human logic. They prefer round numbers or amounts just under reporting limits (e.g., <code>$9,900</code>).
+          </p>
+        </div>
+
+        <!-- Heuristic 2 -->
+        <div class="heuristic-card">
+          <h3 class="heuristic-title">2. The Inner Circle</h3>
+          <p class="noir-body">
+            <strong>Bots:</strong> Provide liquidity to the market. They interact with thousands of random wallets.
+          </p>
+          <p class="noir-body">
+            <strong>Smurfs:</strong> Work in closed loops. They primarily interact with a small, specific group of wallets (a cluster) to move money in a circle.
+          </p>
+        </div>
+
+        <!-- Heuristic 3 -->
+        <div class="heuristic-card">
+          <h3 class="heuristic-title">3. The Rhythm of Time</h3>
+          <p class="noir-body">
+            <strong>Bots:</strong> React to market signals. They are erratic and execute in milliseconds.
+          </p>
+          <p class="noir-body">
+            <strong>Smurfs:</strong> Follow a schedule. Transactions often appear at regular intervals (e.g., within 5 minutes, or every 45 minutes exactly) to avoid detection.
+          </p>
+        </div>
+      </div>
+
+      <p class="noir-body">
+        By applying these heuristics to the clusters found in our matrix, we can programmatically flag suspicious behavior for further investigation, separating legitimate "liquidity chasing" from illicit structuring.
+      </p>
+
+      <!-- Call to Action Button -->
+      <div class="cta-container">
+        <a href="cluster.html" class="noir-button">
+          Launch Visualization
+        </a>
+        <p class="cta-subtext">Experiment with time windows and thresholds to identify clusters.</p>
+      </div>
+    </div>
+
+
+</div> <!-- end container div-->
+<div id="footer-site"></div>
+<script type="module" src="/js/main.js"></script>
+</body>
+</html>
+

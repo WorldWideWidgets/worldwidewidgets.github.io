@@ -10,11 +10,8 @@
     <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;700&family=Roboto+Mono&family=Roboto:wght@100;300&display=swap" rel="stylesheet">
     <!-- Leaflet CSS -->
     <link rel="stylesheet" href="https://unpkg.com/leaflet@1.9.4/dist/leaflet.css" integrity="sha256-p4NxAoJBhIIN+hmNHrzRCf9tD/miZyoHS5obTRR9BMY=" crossorigin=""/>
-    <!-- Leaflet JS -->
-    <script src="https://unpkg.com/leaflet@1.9.4/dist/leaflet.js" integrity="sha256-20nQCchB9co0qIjJZRGuk2/Z9VM+kNiyxNV1lvTlZBo=" crossorigin=""></script>
 
-
-    <link rel="stylesheet" href="style.css">
+    <link rel="stylesheet" href="/css/main.css">
 </head>
 <body>
     <div id="header-site"></div>
@@ -31,19 +28,23 @@
             </h2>
             <p class="noir-body">
                 If you're an attentive reader you'll notice I dropped <strong>Grice</strong> into the title card on the front. 
-                As a linguist, I believe better chatbots adhere to the maxims of human cooperation.
+                As a linguist, I believe better chatbots adhere to the maxims of human cooperation. As a practical computer user 
+                I believe chatbots are really justy UI elements like a slightly smarter text box, and most "Chatbots" are simply 
+                functional interfaces masquerading as conversation partners. So...
             </p>
-            <p class="noir-body">
-                Most "Chatbots" are simply functional interfaces masquerading as conversation. 
-                The world is bifurcated: <strong>Information Seeking</strong> vs. <strong>Conversational</strong>.
+            <p class="noir-body"></p>    
+                If the world is bifurcated: <strong>Information Seeking</strong> vs. <strong>Conversational</strong>, let's push that position a little. 
+                We'll give a super quick look at how we can get information in and out of UI components including chatbots in this regard 
+                and see if we can't do a little better taking our principled approach.
             </p>
         </section>
 
         <section class="deconstruction-zone">
-            <h3 class="noir-subtitle">Phase 1: The "Defective" Script</h3>
+            <h3 class="noir-subtitle">Phase 1: "Defective" Scripts</h3>
             <p class="noir-body">
-                This is engagement without state; an over-engineered search bar. It ignores the 
-                <strong>Maxim of Relation</strong> because it doesn't know who or where you are.
+                This is engagement without state; an over-engineered search bar. It ignores as Grice woulds say the 
+                <strong>Maxim of Relation</strong> because it doesn't know who or where you are. Therefore it's largely 
+                ignorant of, and irrelevant to any context.
             </p>
 
             <div class="chat-wrapper">
@@ -60,7 +61,7 @@
         <section class="deconstruction-suite container">
     <h3 class="noir-subtitle">The Side-by-Side Reality</h3>
     <p class="noir-body">
-        Observe the same data delivery in a completely different way. On the left, the "Chatbot" adds artificial latency to simulate a persona. On the right, the "Widget" delivers the truth instantly. Without having to do a tremendous amount of introspection, you'll note the internet is full of sites like this. They're like ad word slot machines. 
+        Observe the same data delivery in a completely different way. On the left, the "Chatbot" adds artificial latency to simulate a persona. On the right, the "Widget" delivers the joke instantly. Without having to do a tremendous amount of introspection, you'll note the internet is full of sites like this. They're like ad word slot machines. 
     </p>
 
     <div class="split-view">
@@ -93,20 +94,28 @@
         <span class="accent-green">I</span>ntelligence
     </h2>
     <p class="noir-body">
-        To move from a "script" to a "partner," a system must understand your <strong>Where</strong> and your <strong>When</strong>. Imagine a virtual assistant booking a train from Princeton Junction to DC; it doesn't ask for your life story—it asks the relevant details. How many seats do you need? What date are you travelling? What time of day? Regional or Acela? Business or coach? .
+        To move from a "script" to a "partner," a system should know what it needs to know in order to be useful. In our case, 
+        it needs to understand your <span class="accent-green">Where</span> and your <span class="accent-green">When</span> and have some idea about
+        <span class="accent-green">Now</span>.  Imagine a virtual assistant booking a train from Princeton Junction to DC; it doesn't ask 
+        for your life story—it asks the relevant details. How many seats do you need? What date are you travelling? What time of day? Regional or Acela? 
+        Maybe what you want to pay for the seat... business or coach.
     </p>
     <p class="noir-body">
-        In our case, to discuss the week's text meaningfully, the system needs the precise timing of the Sabbos candle lighting. We could force you through four dropdown menus and a stack of ambiguous address fields—a relic of the 1990s web.  Like with any good personal assistant, we should either prompt you, verbally or with text. Or really, since we're a chatbot we should be able to get it out of casual but directed conversation. 
+        In our case, to discuss the week's text meaningfully, the system needs the precise timing of the Sabbos candle lighting. We could force you 
+        through four dropdown menus and a stack of ambiguous address fields—a relic of the 1990s web.  
+        Like with any good personal assistant, we should either prompt you, verbally or with text. Or really, since we're a 
+        chatbot we should be able to get it out of casual but directed conversation. 
     </p>
     <p class="noir-body">
-        Instead, we use <strong>Coordinate Truth</strong>. One pin. One click. High-precision data that respects the <strong>Maxim of Quantity</strong>: giving the machine exactly what it needs to be cooperative, and nothing more.
+        Instead, we'll use something more effective than "stupid chatter". We'll use <span class="accent-green">Acctual Geo Coordinates</span> and 
+        <span class="accent-green">A Clock</span>! One pin. One click. High-precision data that respects the <span class="accent-green">G</span>ricean <span class="accent-green">M</span>axim of Quantity: giving the machine exactly what it needs to be cooperative, and nothing more.
     </p>
 </section>
 
 <!-- THE MAP CONTAINER -->
 <section class="map-section container">
     <section class="precision-thesis container">
-    <h3 class="noir-subtitle">Coordinate Precision Crushes Ambiguity</h3>
+    <h3 class="noir-subtitle">Clarity Crushes Ambiguity</h3>
     <p class="noir-body">
         Human language is beautifully imprecise, but for a machine, it is a minefield of ambiguity. In a standard "dropdown" interface, a user might type "Princeton." Does the system assume New Jersey? West Virginia? British Columbia? 
     </p>
@@ -133,14 +142,14 @@
 <section class="final-pivot container">
     <h2 class="noir-title">
         <span class="accent-green">P</span>hase 3: 
-        <span class="accent-green">T</span>he 
-        <span class="accent-green">S</span>ynthesis
+        <span class="accent-green">A B</span>etter
+        <span class="accent-green">P</span>roduct
     </h2>
     <p class="noir-body">
-        We have deconstructed the script. We have captured the <strong>Coordinate Truth</strong>. Now, we rescue these pieces from the "defective" model and assemble them into a high-fidelity, agentive environment.
+        We have deconstructed the script. We have captured the user's actual (self reported) state of affairs and now, we can rescue these pieces from the "defective" model and assemble them into a high-fidelity, agentive environment.
     </p>
     <p class="noir-body">
-        Follow the data to the <strong>Torah Go-llm</strong>—a stateful, cooperative assistant that understands exactly where, when, and who you are.
+        Follow the data to the <strospan class="accent-green"ng>Torah Go-llm</span> — a stateful, cooperative assistant that understands exactly where, when, and who you are.
     </p>
     
     <div class="cta-wrapper">
@@ -152,7 +161,7 @@
     </main>
 
     <div id="footer-site"></div>
-    <script type="module" src="main.js"></script>
+    <script type="module" src="/js/main.js"></script>
 </body>
 </html>
 
