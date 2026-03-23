@@ -63,7 +63,7 @@ async function analyze() {
     const [result] = await classifier(text);
 
     // Determine pragmatic intent
-    let intent = "Likely neutral, but watch your back.";
+    let intent = "Likely Neutral";
     const lower = text.toLowerCase();
     for (const [k, v] of Object.entries(pragmaticMap)) {
         if (lower.includes(k)) {
@@ -77,7 +77,7 @@ async function analyze() {
     document.getElementById("intent-out").innerText = intent;
 
     const score = Math.round(result.score * 100);
-    const label = result.label === "NEGATIVE" ? "Passive-Aggressive" : "Good Vibes";
+    const label = result.label === "NEGATIVE" ? "Highly Informal | Slang | Passive-Aggressive" : "Normal Tone";
     document.getElementById("score-out").innerText = `${score}% ${label}`;
 
     outputEl.classList.remove("hidden");
