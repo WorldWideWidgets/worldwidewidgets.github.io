@@ -191,7 +191,7 @@
         appear in the same bucket repeatedly, the edge between is weighted higher and shown as thicker.
       </p>
 
-      <h4 class="noir-title">The Core Logic</h4>
+      <h4 class="noir-title">The Core Logic - in <span class="accent-green">P</span>seudocode</h4>
       <p class="noir-body">
         To find potential shenanigans I implemented a "Time-Window Clustering" algorithm ovwer that matrix. 
         Instead of just looking at who sent money to whom, we look at <em>when</em> they transacted. This helps 
@@ -199,8 +199,6 @@
       </p>
 
       <div class="code-block-container">
-        <h4 class="noir-title">The Pseudocode</h4>
-
         <pre><code>
   function calculateClusters(timeWindowMinutes, minThreshold) {
     // 1. Create Time Buckets
