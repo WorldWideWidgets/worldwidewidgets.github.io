@@ -44,8 +44,8 @@
       </h3>
       <p class="noir-body" style="margin-bottom: 2rem;">
         Understanding the language is the first step to understanding the data. Since blockchain and crypto are relatively new, I feel it's important to get our vocab straight. 
-        Admittedly, this is also in some part for my wife and children so when we speak about things like 
-        <span class="accent-green">F</span>ungible <span class="accent-green">T</span>okens we're all on the same page. Here are some essentials.
+        Admittedly, this is also in some part for my wife and kids so when we speak about things like 
+        <span class="accent-green">F</span>ungible <span class="accent-green">T</span>okens we're all on the same page. Here are some vocab essentials.
         
         <!-- <br>
             The vocabulary is followed by a short exposition on distinguishing activities like <span class="accent-green">S</span>murfing and 
@@ -141,7 +141,7 @@
       </div>
       
       <div class="future-terms">
-        <p><strong>I might define these in the future:</strong> Mixer / Tumbler, Atomic Swap, Bridge, Governance Token, Stablecoin, Hash Rate, 51% Attack.</p>
+        <p><strong>I might define these in the future: Mixer/Tumbler, Atomic Swap, Bridge, Governance Token, Stablecoin, Hash Rate, 51% Attack</strong></p>
       </div>
     </div>
 
@@ -159,36 +159,47 @@
         Our approach builds a <strong>Co-occurrence Matrix</strong>. Imagine a giant grid where every row and column is a wallet address. If Wallet A sends money to Wallet B, we mark a "1" in that cell. Over time, these numbers grow, revealing hidden networks.
       </p>
 
-      <h3 class="noir-subtitle">The Matrix Concept</h3>
       <div class="code-block-container">
+        <h3 class="noir-title">
+          <span class="accent-green">T</span>he 
+          <span class="accent-green">M</span>atrix 
+          <span class="accent-green">C</span>oncept</h3>
         <pre><code>
           Wallet Addresses
           +-----------+-----------+-----------+-----------+
           |           |  Wallet A |  Wallet B |  Wallet C |
           +-----------+-----------+-----------+-----------+
-          | Wallet A  |     0     |    14     |     1     |
+          | Wallet A  |     0     |     4     |     1     |
           +-----------+-----------+-----------+-----------+
-          | Wallet B  |    14     |     0     |    22     |  <- High Score
+          | Wallet B  |     4     |     0     |    22     |  <- High Score
           +-----------+-----------+-----------+-----------+
           | Wallet C  |     1     |    22     |     0     |
           +-----------+-----------+-----------+-----------+
           
           Interpretation:
-          - Wallets A and B interacted 14 times (Suspiciously High?)
+          - Wallets A and B interacted 4 times (Suspiciously High?)
           - Wallets A and C interacted only 1 time (Likely Random)
+          - Wallets B and C interacted 22 times (Curiously High)
         </code></pre>
       </div>
 
       <p class="noir-body">
-        In the visualization above, we built this matrix in real-time. We group transactions into "time buckets" (e.g., 1 hour windows). If two wallets appear in the same bucket repeatedly, the edge between them gets thicker.
+        In the visualization on the next page, we a version this matrix 
+        we built earlier, but in principle it could be built in real-time. We group 
+        transactions into "time buckets" (e.g., 1 hour windows). If two wallets 
+        appear in the same bucket repeatedly, the edge between is weighted higher and shown as thicker.
       </p>
 
-      <h3 class="noir-subtitle">The Core Logic</h3>
+      <h4 class="noir-title">The Core Logic</h4>
       <p class="noir-body">
-        I implemented a "Time-Window Clustering" algorithm. Instead of just looking at who sent money to whom, we look at <em>when</em> they did it. This helps distinguish between legitimate high-volume traders and coordinated structuring rings.
+        To find potential shenanigans I implemented a "Time-Window Clustering" algorithm ovwer that matrix. 
+        Instead of just looking at who sent money to whom, we look at <em>when</em> they transacted. This helps 
+        distinguish legitimate high-volume traders and intentional coordinated structuring.
       </p>
 
       <div class="code-block-container">
+        <h4 class="noir-title">The Pseudocode</h4>
+
         <pre><code>
   function calculateClusters(timeWindowMinutes, minThreshold) {
     // 1. Create Time Buckets
@@ -221,7 +232,7 @@
       </div>
 
       <p class="noir-body">
-        By adjusting the <strong>Time Window</strong> and <strong>Threshold</strong> sliders, you can tune the sensitivity. A small time window catches rapid-fire bot activity, while a larger window reveals long-term structuring schemes. I find stuff like this so cool, I dedicated a whole page to it!
+        By adjusting the <strong>Time Window</strong> and <strong>Threshold</strong> sliders on the next page, you can tune the sensitivity. A small time window catches rapid-fire bot activity, while a larger window reveals long-term structuring schemes. I find stuff like this so cool, I dedicated a whole page to it!
       </p>
     </div> <!-- end algorithm section -->
 
