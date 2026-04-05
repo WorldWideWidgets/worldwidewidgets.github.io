@@ -35,6 +35,22 @@
     </h2>
     <div class="heuristics-section">
       <h3 class="noir-title">
+        <span class="accent-green">S</span>tructuring 
+        <span class="accent-green">D</span>etection
+      </h3>
+      <p class="noir-body">
+      This visualization detects <strong>Temporal Correlation</strong>. It looks for wallets that act at the <em>exact same time</em>.
+      </p>
+      <p class="noir-body">
+      If 10 different wallets all send transactions within the same 5-minute window repeatedly, they form a cluster. In legitimate trading, this is rare. In fraud (specifically <strong>Smurfing</strong>), it is the primary signal that a group of wallets is being controlled by a single entity trying to move money in concert.
+      </p>
+      <p class="noir-body">
+      Use the sliders to adjust the time-sensitivity. A tight window (1 min) catches bots; a wider window (60 min) catches human coordination.
+      </p>
+    </div>
+
+    <!-- <div class="heuristics-section">
+      <h3 class="noir-title">
         <span class="accent-green">W</span>hat's 
         <span class="accent-green">T</span>his? 
       </h3>
@@ -43,7 +59,7 @@
       The data are the last 10,000 transactions on coinbase-44 from February 2026. Use the sliders below 
       to adjust the time-window and the minimum co-occurrence threshold and watch the graph reshape in real-time.
      </p>
-    </div>
+    </div> -->
 
     <!-- ====================  CONTROLS ==================== -->
     <div id="controls">

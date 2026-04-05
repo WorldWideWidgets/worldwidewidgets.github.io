@@ -138,25 +138,51 @@
           <h3 class="term-title">KYC (Know Your Customer)</h3>
           <p class="term-def">The process businesses use to verify the identity of their clients. It is a standard check to prevent money laundering and ensure users are who they say they are.</p>
         </div>
-      </div>
+  
+        <div class="term-card">
+          <h3 class="term-title">Funneling</h3>
+          <p class="term-def">A pattern where many wallets send funds to a single central wallet. It looks like a river flowing into a lake.</p>
+        </div>
+
+        <div class="term-card">
+          <h3 class="term-title">Peacocking</h3>
+          <p class="term-def">The reverse of funneling: one wallet sends funds to many different wallets. It looks like a firework exploding.</p>
+        </div>
+      </div> <!-- end term list -->
       
       <div class="future-terms">
-        <p><strong>I might define these in the future: Mixer/Tumbler, Atomic Swap, Bridge, Governance Token, Stablecoin, Hash Rate, 51% Attack</strong></p>
+        <p><strong>I leave the definition of these terms as an exercise for the user: Mixer/Tumbler, Atomic Swap, Bridge, Governance Token, Stablecoin, Hash Rate, 51% Attack</strong></p>
       </div>
     </div>
 
-        </section> <!-- end terminology section -->
+    </section> <!-- end terminology section -->
+
+    <div class="identity-check" style="background: #fffbe6; border-left: 4px solid #f0ad4e; padding: 1.5rem; margin: 2rem 0; color: #333;">
+      <h4 style="margin-top: 0;"><span class="accent-green">T</span>he <span class="accent-green">I</span>dentity <span class="accent-green">C</span>hallenge</h4>
+      <p style="font-size: 0.95rem; margin-bottom: 0;">
+        It is crucial to remember that a <strong>Wallet Address is not an ID card</strong>. 
+        We can write algorithms to detect <em>behaviors</em> (like funneling or smurfing), but connecting a specific wallet to a human in the brick-and-mortar world requires external data — usually 
+        "Know Your Customer" (KYC) records from centralized exchanges. We can find the <em>suspicious pattern</em>, but law enforcement must still knock on the door. Anonymity is a big selling point 
+        for crypto. <em>Dostoevsky</em> would agree - this is  <span class="accent-green">A T</span>horoughly <span class="accent-green">M</span>odern incarnation tension between 
+        absolute freedom with its inherent risks and enforced safety at the cost of privacy and autonomy.
+      </p>
+    </div>
+
 
     <div class="algorithm-section">
       <h3 class="noir-title">
-        <span class="accent-green">T</span>he
-        <span class="accent-green">A</span>lgorithm
+        <span class="accent-green">T</span>emporal
+        <span class="accent-green">C</span>orrelation
       </h3>
       <p class="noir-body">
         Finding illicit activity in a sea of transactions is similar to how streaming services recommend movies. It is fundamentally a <strong>similarity problem</strong>. If two wallets interact with each other far more often than random chance would suggest, they are likely coordinating their behavior.
       </p>
       <p class="noir-body">
         Our approach builds a <strong>Co-occurrence Matrix</strong>. Imagine a giant grid where every row and column is a wallet address. If Wallet A sends money to Wallet B, we mark a "1" in that cell. Over time, these numbers grow, revealing hidden networks.
+      </p>
+      <p class="noir-body">
+        This algorithm cathches wallets that trade currency <i>at the same time</i>. Great for structuring!
+
       </p>
 
       <h3 class="noir-title">
@@ -240,6 +266,8 @@
       <h2 class="noir-title">
         <span class="accent-green">H</span>euristics &amp; 
         <span class="accent-green">A</span>nalysis
+        <span class="accent-green">T</span>emporal
+        <span class="accent-green">C</span>orrelation
       </h2>
       <p class="noir-body">
         Once we have identified a cluster of wallets, the next challenge is determining intent. How do we differentiate between a high-frequency trading bot and a "smurf" (a person hired to structure illicit funds)? Both move fast and both move often, but they leave different digital footprints.
@@ -292,6 +320,97 @@
         <p class="cta-subtext">Experiment with time windows and thresholds to identify clusters.</p>
       </div>
     </div>
+
+        <!-- NEW SECTION: FOLLOW THE MONEY -->
+      <div class="algorithm-section" style="margin-top: 4rem; border-top: 1px solid #333; padding-top: 2rem;">
+        <h3 class="noir-title">
+          <span class="accent-green">A</span>lternative 
+          <span class="accent-green">V</span>iew: 
+          <span class="accent-green">F</span>ollow 
+          <span class="accent-green">T</span>he
+          <span class="accent-green">M</span>oney
+        </h3>
+        <p class="noir-body">
+          While the previous method detects <em>who acts together</em>, this method detects <em>where the money goes</em>. We build a <strong>Directed Graph</strong> where an arrow points from Sender to Receiver.
+        </p>
+
+        <h4 class="noir-title">The Flow Logic</h4>
+        <div class="code-block-container">
+          <pre><code>
+  function calculateMoneyFlow(minValueThreshold) {
+    const edgeMap = {};
+
+    rawTransactions.forEach(tx => {
+      // Create a unique key for this specific pairing
+      const key = `${tx.from}->${tx.to}`;
+
+      // Aggregate values: if they transact often, 
+      // the edge gets thicker and darker.
+      if (!edgeMap[key]) {
+        edgeMap[key] = { from: tx.from, to: tx.to, value: 0 };
+      }
+      edgeMap[key].value += parseFloat(tx.value);
+    });
+
+    // Filter out noise (tiny transfers)
+    return Object.values(edgeMap).filter(e => e.value > minValueThreshold);
+  }
+          </code></pre>
+        </div>
+
+        <p class="noir-body">
+          This view helps identify <strong>Liquidity Hubs</strong> and <strong>Exit Nodes</strong>. If a wallet receives money from 50 sources and sends it all to one destination, you are looking at a funnel—classic behavior in laundering operations.
+        </p>
+
+
+  <div class="heuristics-section">
+      <h2 class="noir-title">
+        <span class="accent-green">H</span>euristics &amp; 
+        <span class="accent-green">A</span>nalysis - 
+        <span class="accent-green">F</span>ollow
+        <span class="accent-green">T</span>he 
+        <span class="accent-green">M</span>oney
+      </h2>
+      <p class="noir-body">
+        Once we have identified a cluster of wallets, the next challenge is determining intent. How do we differentiate between a high-frequency trading bot and a "smurf" (a person hired to structure illicit funds)? Both move fast and both move often, but they leave different digital footprints.
+      </p>
+
+      <div class="heuristic-grid">
+        <!-- Heuristic 1 -->
+        <div class="heuristic-card">
+          <h3 class="heuristic-title">1. Peacocks and Fireworks</h3>
+          <p class="noir-body">
+            <strong>Who does it:</strong> Smurfs and Bots.
+          </p>
+          <p class="noir-body">
+            <strong>How we catch it: </strong>Smurfs and Bots distribute payouts to a criminal network, or a legitimate service paying salaries/users, so... We look for a single high-volume node spraying arrows outwards. This distinguishes a "payday" from a "smurfing ring" requires checking the rhythm (bots vs. humans) and the amounts (round numbers vs. precise).
+          </p>
+        </div>
+
+        <!-- Heuristic 2 -->
+         <div class="heuristic-card">
+          <h3 class="heuristic-title">2. Literally Funneling</h3>
+          <p class="noir-body">
+            <strong>Who does it:</strong> Bad Actors... but also Smurfs and Bots.
+          </p>
+          <p class="noir-body">
+            <strong>How we catch it:</strong> Our "Money Flow" visualizer will show a dense cluster of arrows all pointing to one node. If the inputs are unknown wallets and the output is a known exchange, that's suspicious and could easily be consolidation of "dirty" money, but it could also just be exchanges gathering liquidity.      
+          </p>
+        </div>
+      </div>
+      <p class="noir-body">
+        By applying these heuristics to the clusters found in our matrix, we can programmatically flag suspicious behavior for further investigation, separating legitimate "liquidity chasing" from illicit structuring.
+      </p>
+     
+
+        <div class="cta-container" style="margin-top: 2rem;">
+          <a href="flow.html" class="noir-button";">
+            Launch Money Flow Visualizer
+          </a>
+          <p class="cta-subtext">See capital movement in real-time.</p>
+        </div>
+      </div>
+    
 
 
 </div> <!-- end container div-->

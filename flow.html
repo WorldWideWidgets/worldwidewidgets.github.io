@@ -1,0 +1,73 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Money Flow Visualization</title>
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;700&family=Roboto+Mono&display=swap" rel="stylesheet">
+  <link href="https://unpkg.com/vis-network@10.0.2/styles/vis-network.min.css" rel="stylesheet" type="text/css" crossorigin="anonymous" />
+  <link rel="stylesheet" href="/css/main.css">
+</head>
+<body>
+  <div id="header-site"></div>
+
+  <main class="container">
+    <nav class="back-nav"><a href="/crypto.html">← Back to Crypto Landing</a></nav>
+
+    <h2 class="noir-title">
+      <span class="accent-green">M</span>oney
+      <span class="accent-green">F</span>low
+      <span class="accent-green">V</span>isualizer
+    </h2>
+    
+    <div class="heuristics-section">
+      <h3 class="noir-title">
+        <span class="accent-green">D</span>irected
+        <span class="accent-green">G</span>raph
+      </h3>
+      <p class="noir-body">
+      This view treats the blockchain as a pipe system. Arrows indicate the direction of capital flow. 
+      Thick lines represent high volume transfers. Again - these data are from month (Feb. 2026) on coinbase-44 and the currency 
+      we're looking at is <span class="accent-green">E</span>therium <strong>(ETH)</strong>. For refernce, in April 2026 the 
+      conversion rate to a well known fiat currency is 1 <span class="accent-green">ETH</span> == $2000 <span class="accent-green">USD</span>. 
+      There are a lot of trades on coinbase, so I have the zoom pretty far out, the thresholds pretty high. Feel free to adjust.  
+      </p>
+      <p class="noir-body">
+      Look for <strong>Funneling</strong>: many inputs leading to a single output. 
+      Or <strong>Peacocking</strong>: a single input splitting into many outputs. All right, I ... there is a  
+      <span class="accent-green">H</span>uge <span class="accent-green">F</span>unnel in the center, and then almost everything 
+      goes to <string>1 wallet</string>. Said another way, in <span class="accent-green">20</span> days, approximately 
+      <span class="accent-green">$189,925,325</span> USD went into exactly 1 wallet. Might be worthwhile tracking that wallet, 
+      or... it might be a crypto-fund. Next challenge find out for sure and <span class="accent-green">C</span>ollect <span class="accent-green">T</span>axes. 
+      <strong>HA!</strong> Good luck <span class="accent-green">A</span>mateur <span class="accent-green">C</span>urrency <span class="accent-green">S</span>leuths!
+      </p>
+    </div>
+
+    <!-- Controls -->
+    <div id="controls">
+      <div class="label">Min Transfer (ETH):</div>
+      <!-- Changed max to 50, value to 1.0, step to 0.5 -->
+      <input type="range" id="valueSlider" min="0" max="250" value="200.0" step="0.5">
+      <div><span id="valueDisplay">1.0</span> ETH</div>
+
+      <button id="resetBtn">Reset View</button>
+    </div>
+
+    <!-- Stats -->
+    <div id="stats">
+      <div class="stat-item">Nodes: <span id="nodeCount">0</span></div>
+      <div class="stat-item">Edges: <span id="edgeCount">0</span></div>
+    </div>
+
+    <!-- Canvas -->
+    <div id="wallet-graph-container"></div>
+  </main>
+
+  <div id="footer-site"></div>
+  <script type="module" src="/js/main.js"></script>
+  <!-- Vis.js must be loaded before the page script -->
+  <script src="https://unpkg.com/vis-network@10.0.2/dist/vis-network.min.js"></script>
+</body>
+</html>

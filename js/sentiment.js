@@ -1,5 +1,7 @@
+// sentiment.js
 import { pipeline } from 'https://cdn.jsdelivr.net/npm/@xenova/transformers@2.17.1/dist/transformers.min.js';
 
+// 1. DATA & STATE
 const pragmaticMap = {
     "per my last email": "I already told you this; you aren't listening.",
     "as i'm sure you're aware": "You clearly forgot this obvious fact.",
@@ -13,47 +15,13 @@ const pragmaticMap = {
     "touch base": "I want to have a long, pointless meeting."
 };
 
-let classifier;
+let classifier = null;
 
-async function init() {
-    const statusEl = document.getElementById("status");
-    const progressEl = document.getElementById("progress");
-    const btn = document.getElementById("analyze-btn");
-
-    try {
-        // Load the model (quantized by default for efficiency)
-        classifier = await pipeline(
-            "sentiment-analysis",
-            "Xenova/distilbert-base-uncased-finetuned-sst-2-english",
-            {
-                progress_callback: data => {
-                    if (data.status === "progress") {
-                        // Calculate percentage based on loaded/total
-                        const percent = data.progress ? Math.round(data.progress) : 0;
-                        progressEl.style.width = percent + "%";
-                    } else if (data.status === "ready") {
-                         progressEl.style.width = "100%";
-                    }
-                }
-            }
-        );
-
-        statusEl.innerText = "AI Brain Loaded ✅";
-        btn.disabled = false;
-        btn.innerText = "De-code Intent";
-
-    } catch (err) {
-        console.error("Initialization Error:", err);
-        statusEl.innerText = "Load failed. CORS error? Run via local server.";
-        statusEl.style.color = "red";
-    }
-}
-
+// 2. LOGIC
 async function analyze() {
     const text = document.getElementById("input-text").value.trim();
     if (!text || !classifier) return;
 
-    // Visual feedback
     const btn = document.getElementById("analyze-btn");
     const outputEl = document.getElementById("output");
     
@@ -84,7 +52,48 @@ async function analyze() {
     btn.innerText = "De-code Intent";
 }
 
-document.getElementById("analyze-btn").onclick = analyze;
+async function loadModel() {
+    const statusEl = document.getElementById("status");
+    const progressEl = document.getElementById("progress");
+    const btn = document.getElementById("analyze-btn");
 
-// Start loading immediately
-init();
+    try {
+        // Load the model (quantized by default for efficiency)
+        classifier = await pipeline(
+            "sentiment-analysis",
+            "Xenova/distilbert-base-uncased-finetuned-sst-2-english",
+            {
+                progress_callback: data => {
+                    if (data.status === "progress") {
+                        const percent = data.progress ? Math.round(data.progress) : 0;
+                        progressEl.style.width = percent + "%";
+                    } else if (data.status === "ready") {
+                         progressEl.style.width = "100%";
+                    }
+                }
+            }
+        );
+
+        statusEl.innerText = "AI Brain Loaded ✅";
+        btn.disabled = false;
+        btn.innerText = "De-code Intent";
+
+    } catch (err) {
+        console.error("Initialization Error:", err);
+        statusEl.innerText = "Load failed. CORS error? Run via local server.";
+        statusEl.style.color = "red";
+    }
+}
+
+// 3. EXPORTED STARTER
+export function initSentiment() {
+    // Attach the listener to the button
+    const btn = document.getElementById("analyze-btn");
+    if (btn) {
+        btn.onclick = analyze;
+    }
+    
+    // Start loading the model immediately
+    loadModel();
+}
+

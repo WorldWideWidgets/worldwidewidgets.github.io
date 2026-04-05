@@ -1,5 +1,5 @@
 // services.js - Shared Functional Logic
-
+// services.js
 export const sleep = (ms) => new Promise(resolve => setTimeout(resolve, ms));
 
 export async function loadComponent(id, file) {
@@ -24,8 +24,8 @@ export async function typeWriter(text, element, speed = 40) {
     }
 }
 
-// THE REFINED MAP ENGINE (Extracted from main.js)
-export function initLeafletMap(containerId, onCoordsCaptured) {
+// REFACTORED: Lean Map Factory
+export function initLeafletMap(containerId) {
     const mapElement = document.getElementById(containerId);
     if (!mapElement) return null;
 
@@ -35,7 +35,7 @@ export function initLeafletMap(containerId, onCoordsCaptured) {
     }).setView([40.3488, -74.6022], 7);
 
     L.tileLayer('https://{s}.basemaps.cartocdn.com/light_all/{z}/{x}/{y}{r}.png', {
-        attribution: '&copy; <a href="https://www.openstreetmap.org">OSM</a> &copy; <a href="https://carto.com">CARTO</a>',
+        attribution: '&copy; OSM &copy; CARTO',
         subdomains: 'abcd',
         maxZoom: 20
     }).addTo(map);
@@ -44,13 +44,7 @@ export function initLeafletMap(containerId, onCoordsCaptured) {
     map.setMaxBounds(bounds);
     map.on('drag', () => map.panInsideBounds(bounds, { animate: false }));
 
-    let marker = null;
-    map.on('click', (e) => {
-        const wrapped = e.latlng.wrap();
-        if (marker) marker.setLatLng(wrapped);
-        else marker = L.marker(wrapped).addTo(map);
-        if (onCoordsCaptured) onCoordsCaptured(wrapped);
-    });
-
-    return { map, marker };
+    return map; // Return the map instance
 }
+
+

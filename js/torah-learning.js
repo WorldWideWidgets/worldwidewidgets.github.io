@@ -1,30 +1,58 @@
-import { loadComponent, initLeafletMap, typeWriter, sleep } from './services.js';
+
+// torah-learning.js
+import { initLeafletMap, typeWriter, sleep } from './services.js';
 import { 
     fetchHebcal,
-    fetchParshaAliyot,      // Keep in case of fallback 
     fetchSefariaText, 
-    fetchSefariaLinks,      // REQUIRED for Commentary Ranking
-    fetchCommentaryText,    // REQUIRED for Commentary Reader
-    fetchSefariaCalendar,   // NEW
-    fetchAliyahText         // NEW
+    fetchSefariaLinks,      
+    fetchCommentaryText,    
+    fetchSefariaCalendar,   
+    fetchAliyahText         
 } from './api-service.js';
 
-// IMPORTING RANKING ENGINE
+// IMPORTING RANKING ENGINE (These are now properly imported, not global)
 import { parseSefariaData } from './sefaria-parser.js';
 import { CommentatorRankingEngine } from './sefaria-commentator-rank.js';
 
 // 1. STATE
-// At the top of torah-learning.js
 let appState = { 
     name: '', 
     lat: null, 
     lng: null, 
     parsha: '', 
     candleLighting: '',
-    aliyotList: [],      // NEW: Store the list of refs
-    currentAliyahIndex: 0 // NEW: Track current position
+    aliyotList: [],
+    currentAliyahIndex: 0,
+    mapInstance: null // Store map instance here
 };
+/////////////////
+// import { loadComponent, initLeafletMap, typeWriter, sleep } from './services.js';
+// import { 
+//     fetchHebcal,
+//     fetchParshaAliyot,      // Keep in case of fallback 
+//     fetchSefariaText, 
+//     fetchSefariaLinks,      // REQUIRED for Commentary Ranking
+//     fetchCommentaryText,    // REQUIRED for Commentary Reader
+//     fetchSefariaCalendar,   // NEW
+//     fetchAliyahText         // NEW
+// } from './api-service.js';
 
+// // IMPORTING RANKING ENGINE
+// import { parseSefariaData } from './sefaria-parser.js';
+// import { CommentatorRankingEngine } from './sefaria-commentator-rank.js';
+
+// // 1. STATE
+// // At the top of torah-learning.js
+// let appState = { 
+//     name: '', 
+//     lat: null, 
+//     lng: null, 
+//     parsha: '', 
+//     candleLighting: '',
+//     aliyotList: [],      // NEW: Store the list of refs
+//     currentAliyahIndex: 0 // NEW: Track current position
+// };
+// ///////////////////////
 // 2. UI RENDERING including BiLingaual stuff
 function renderCommentarySuggestion(topCommentator) {
     const suggestionBox = document.getElementById('commentary-suggestion');
@@ -139,7 +167,6 @@ async function loadCommentaryReader(ref) {
 }
 
 
-
 // 3. STAGE TRANSITIONS
 async function transitionToMap() {
     const nameInput = document.getElementById('user-name');
@@ -150,13 +177,44 @@ async function transitionToMap() {
     document.getElementById('stage-welcome').classList.add('hidden');
     document.getElementById('stage-location').classList.remove('hidden');
 
-    initLeafletMap('map-container', (coords) => {
-        appState.lat = coords.lat;
-        appState.lng = coords.lng;
-        document.getElementById('coord-display').innerHTML = 
-            `<span class="accent-green">TRUTH:</span> ${coords.lat.toFixed(4)} | ${coords.lng.toFixed(4)}`;
-    });
+    // Initialize Map using the new factory pattern
+    const mapObj = initLeafletMap('map-container');
+    if (mapObj) {
+        appState.mapInstance = mapObj; // Save instance to state if needed later
+        
+        // Handle clicks HERE, not in services.js
+        let marker = null;
+        mapObj.on('click', (e) => {
+            const wrapped = e.latlng.wrap();
+            
+            // Update Marker
+            if (marker) marker.setLatLng(wrapped);
+            else marker = L.marker(wrapped).addTo(mapObj);
+
+            // Update State & UI
+            appState.lat = wrapped.lat;
+            appState.lng = wrapped.lng;
+            document.getElementById('coord-display').innerHTML = 
+                `<span class="accent-green">TRUTH:</span> ${wrapped.lat.toFixed(4)} | ${wrapped.lng.toFixed(4)}`;
+        });
+    }
 }
+// async function transitionToMap() {
+//     const nameInput = document.getElementById('user-name');
+//     if (!nameInput.value.trim()) return alert("Please enter your name.");
+    
+//     appState.name = nameInput.value.trim();
+    
+//     document.getElementById('stage-welcome').classList.add('hidden');
+//     document.getElementById('stage-location').classList.remove('hidden');
+
+//     initLeafletMap('map-container', (coords) => {
+//         appState.lat = coords.lat;
+//         appState.lng = coords.lng;
+//         document.getElementById('coord-display').innerHTML = 
+//             `<span class="accent-green">TRUTH:</span> ${coords.lat.toFixed(4)} | ${coords.lng.toFixed(4)}`;
+//     });
+// }
 
 /**
  * Builds HTML for Stacked Hebrew/English verses.
@@ -190,55 +248,6 @@ function buildStackedText(hebrewVerses, englishVerses) {
 
     return html;
 }
-
-// async function loadAliyahByIndex(index) {
-//     if (index < 0 || index >= appState.aliyotList.length) return;
-
-//     const ref = appState.aliyotList[index];
-//     appState.currentAliyahIndex = index;
-
-//     const reader = document.getElementById('parsha-reader');
-//     if (!reader) return;
-//     reader.innerHTML = `<div class="noir-body">Loading ${ref}...</div>`;
-//     reader.classList.remove('hidden');
-
-//     // Use the NEW fetcher
-//     const data = await fetchAliyahText(ref);
-    
-//     if (!data || (!data.he && !data.en)) {
-//         reader.innerHTML = `<div class="noir-body error">Could not load text for ${ref}.</div>`;
-//         return;
-//     }
-
-//     const contentHtml = renderResponsiveText(data.he, data.en);
-    
-//     // Title Logic: "Parsha Name: Aliyah 1 (Ref)"
-//     const aliyahLabel = index < 7 ? `Aliyah ${index + 1}` : (index === 7 ? "Maftir" : "Haftarah");
-//     // Use the parsha name we got from Calendar API
-//     const title = `${appState.parshaName || 'Parsha'}: ${aliyahLabel} (${data.ref})`;
-
-//     const hasPrev = index > 0;
-//     const hasNext = index < appState.aliyotList.length - 1;
-
-//     reader.innerHTML = `
-//         <div class="view-side" style="margin-top: 20px; border: 1px solid var(--border);">
-//             <h4 class="noir-subtitle">${title}</h4>
-//             <div class="chat-mini" style="height: 300px; overflow-y: auto; background: #fff;">
-//                 ${contentHtml}
-//             </div>
-            
-//             <div class="map-controls" style="margin-top: 10px; border: none; background: transparent;">
-//                 <button id="btn-prev-aliyah" class="btn-send" ${!hasPrev ? 'disabled style="opacity:0.5"' : ''}>← Prev</button>
-//                 <span class="noir-body" style="font-size: 0.8rem;">Section ${index + 1} of ${appState.aliyotList.length}</span>
-//                 <button id="btn-next-aliyah" class="btn-send" ${!hasNext ? 'disabled style="opacity:0.5"' : ''}>Next →</button>
-//             </div>
-//         </div>
-//     `;
-
-//     // Navigation Listeners
-//     document.getElementById('btn-prev-aliyah')?.addEventListener('click', () => loadAliyahByIndex(index - 1));
-//     document.getElementById('btn-next-aliyah')?.addEventListener('click', () => loadAliyahByIndex(index + 1));
-// }
 
 async function loadAliyahByIndex(index) {
     if (index < 0 || index >= appState.aliyotList.length) return;
@@ -288,59 +297,6 @@ async function loadAliyahByIndex(index) {
     document.getElementById('btn-prev-aliyah')?.addEventListener('click', () => loadAliyahByIndex(index - 1));
     document.getElementById('btn-next-aliyah')?.addEventListener('click', () => loadAliyahByIndex(index + 1));
 }
-
-
-// async function loadAliyahByIndex(index) {
-//     if (index < 0 || index >= appState.aliyotList.length) return;
-
-//     const ref = appState.aliyotList[index];
-//     appState.currentAliyahIndex = index;
-
-//     const reader = document.getElementById('parsha-reader');
-//     if (!reader) return;
-//     reader.innerHTML = `<div class="noir-body">Loading ${ref}...</div>`;
-//     reader.classList.remove('hidden');
-
-//     const data = await fetchSefariaText(ref);
-//     if (!data) {
-//         reader.innerHTML = `<div class="noir-body error">Could not load text.</div>`;
-//         return;
-//     }
-
-//     const contentHtml = renderResponsiveText(data.he, data.en);
-    
-//     // Create Title: "Ki Tisa: Aliyah 1 (Exodus 30:11)"
-//     const aliyahLabel = index < 7 ? `Aliyah ${index + 1}` : (index === 7 ? "Maftir" : "Haftarah");
-//     const title = `${appState.parsha}: ${aliyahLabel} (${data.ref})`;
-
-//     // Determine Button States
-//     const hasPrev = index > 0;
-//     const hasNext = index < appState.aliyotList.length - 1;
-
-//     reader.innerHTML = `
-//         <div class="view-side" style="margin-top: 20px; border: 1px solid var(--border);">
-//             <h4 class="noir-subtitle">${title}</h4>
-//             <div class="chat-mini" style="height: 300px; overflow-y: auto; background: #fff;">
-//                 ${contentHtml}
-//             </div>
-            
-//             <div class="map-controls" style="margin-top: 10px; border: none; background: transparent;">
-//                 <button id="btn-prev-aliyah" class="btn-send" ${!hasPrev ? 'disabled style="opacity:0.5"' : ''}>← Prev</button>
-//                 <span class="noir-body" style="font-size: 0.8rem;">Section ${index + 1} of ${appState.aliyotList.length}</span>
-//                 <button id="btn-next-aliyah" class="btn-send" ${!hasNext ? 'disabled style="opacity:0.5"' : ''}>Next →</button>
-//             </div>
-//         </div>
-//     `;
-
-//     // Navigation Listeners
-//     document.getElementById('btn-prev-aliyah')?.addEventListener('click', () => {
-//         loadAliyahByIndex(index - 1);
-//     });
-
-//     document.getElementById('btn-next-aliyah')?.addEventListener('click', () => {
-//         loadAliyahByIndex(index + 1);
-//     });
-// }
 
 
 // torah-learning.js
@@ -411,70 +367,6 @@ async function transitionToContext() {
         rankAndSuggestCommentary(appState.parsha);
     }
 }
-
-
-// async function transitionToContext() {
-//     if (!appState.lat) return alert("Please drop a pin on the map.");
-
-//     const hebcalData = await fetchHebcal(appState.lat, appState.lng);
-//     if (!hebcalData) return alert("API Error. Could not fetch times.");
-
-//     appState.parsha = hebcalData.parsha;
-
-//     document.getElementById('stage-location').classList.add('hidden');
-//     const contextStage = document.getElementById('stage-context');
-//     contextStage.classList.remove('hidden');
-
-//     document.getElementById('shabbat-context').innerHTML = `
-//         <p class="noir-body">
-//             <strong>Location Confirmed.</strong><br>
-//             Parsha: <span class="accent-green">${appState.parsha}</span><br>
-//             Candle Lighting: <strong>${hebcalData.candleLighting}</strong>
-//         </p>
-//     `;
-
-//     // 1. Try to Fetch Aliyot
-//     const aliyotList = await fetchParshaAliyot(appState.parsha);
-    
-//     let startRef = null;
-
-//     if (aliyotList && aliyotList.length > 0) {
-//         // SUCCESS: We have Aliyot
-//         appState.aliyotList = aliyotList;
-//         appState.currentAliyahIndex = 0;
-        
-//         // Load First Aliyah
-//         loadAliyahByIndex(0);
-        
-//         // Set startRef for commentary ranking
-//         startRef = aliyotList[0];
-//     } else {
-//         // FALLBACK: Aliyot failed, load whole Parsha
-//         console.warn("Aliyot API failed, falling back to full Parsha.");
-//         const fullData = await fetchSefariaText(appState.parsha);
-        
-//         if (fullData && fullData.ref) {
-//             loadParshaReader(fullData.ref, appState.parsha);
-            
-//             // CRITICAL: Extract the first verse from the range (e.g., "Exodus 30:11-34:35" -> "Exodus 30:11")
-//             // This prevents the 504 Timeout on the commentary API
-//             if (fullData.ref.includes('-')) {
-//                 startRef = fullData.ref.split('-')[0].trim();
-//             } else {
-//                 startRef = fullData.ref; // Single verse
-//             }
-//         }
-//     }
-
-//     // 2. Rank Commentary (ONLY on the startRef to avoid Timeout)
-//     if (startRef) {
-//         await rankAndSuggestCommentary(startRef);
-//     } else {
-//         console.error("Could not determine start reference for commentary.");
-//     }
-// }
-
-
 
 
 function getFirstVerseFromRef(ref) {
@@ -658,15 +550,15 @@ async function loadParshaReader(ref) {
 
 
 // 4. THE DIRECTOR
-async function init() {
-    await loadComponent('header-site', 'header.html');
-    await loadComponent('footer-site', 'footer.html');
+export function initTorahPage() {
+    // We NO LONGER load header/footer here. main.js did that.
     
+    // Set current year in footer if needed
     const yearSpan = document.getElementById('current-year');
     if (yearSpan) yearSpan.textContent = new Date().getFullYear();
 
+    // Attach Listeners
     document.getElementById('btn-continue-to-map')?.addEventListener('click', transitionToMap);
     document.getElementById('btn-confirm-location')?.addEventListener('click', transitionToContext);
 }
 
-init();
